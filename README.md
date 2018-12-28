@@ -8,9 +8,20 @@ We introduce DATMA, a distributed automatic pipeline for fast metagenomic analys
 ---------------------------------------------------------------
 Install
 ---------------------------------------------------------------
-git clone https://github.com/dstreett/DATMA.git
-./install_datma.sh
+A bassic intallation can be done by (NO COMPSs support)
 
-To download the software please contact us:
+1. clonning the DATMA directory 
+2. running the ./install_datma.sh script
+
+A full installation can be done by:
+
+1.Install COMPSs framework
+2. clonning the DATMA directory 
+3. running the ./install_datma.sh script
+
+---------------------------------------------------------------
+FAQ
+---------------------------------------------------------------
+Please contact us:
 bernardo.benavides@udea.edu.co
 felipe.cabarcas@udea.edu.co
