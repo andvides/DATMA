@@ -1,0 +1,37 @@
+##DATMA CONFIGURATION FILE                        
+##
+##USE THIS FILE TO PASS THE ARGUMENTS TO EACH TOOL USED IN THE CLAME WORK FLOW
+##VERSION 1 22-12-2018
+#################################################################################
+#################################################################################
+#GENERAL PARAMETERS
+#-start_in: INITIAL STAGE for the pipeline
+#-inputFile: Full path and name for the input reads
+#-outputDir Full path and name forthe output directory, default ./output
+#
+-start_in 1
+-inputFile /home/users/andresb/genomas/sintBio/metagenome/metagenome_1.fastq,/home/users/andresb/genomas/sintBio/metagenome/metagenome_2.fastq
+-outputDir /home/users/andresb/datma/examples/sintBio2_flas5_test
+-cpus 8
+-typeReads illumina
+#Rapifilt
+-lq 35
+-rq 35
+-m 70
+-wq 0
+#Flash
+-fb 5
+#16S remove
+-database_16s_fasta  /home/users/andresb/16sDatabase/rfam/RFAM_db.fasta
+-database_16s_fm9  /home/users/andresb/16sDatabase/rfam/rfam.fm9
+#CLAME
+-bases 60,40,20
+-sizeBin 20000
+-ld 2
+#assembler
+-assembly spades
+#Blast
+-database_nt /home/db/NT/NT_May_2017/nt
+#Krona
+-combine
+

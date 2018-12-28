@@ -1,0 +1,51 @@
+#################################################################################
+#################################################################################
+##DATMA CONFIGURATION FILE                        
+##
+##USE THIS FILE TO PASS THE ARGUMENTS TO EACH TOOL USED IN THE CLAME WORK FLOW
+##VERSION 2 20-11-2018
+#################################################################################
+#
+#################################################################################
+#GENERAL PARAMETERS
+#################################################################################
+#-start_in: INITIAL STAGE for the pipeline
+#-inputFile: Full path and name for the input reads
+#-outputDir Full path and name forthe output directory, default ./output
+-start_in 1
+-inputFile examples/bmini/Bancomini.fastq
+-outputDir examples/bmini/bmini_out
+-cpus 8
+-typeReads fastq
+#################################################################################
+#cleanTool Configuration
+#################################################################################
+#cleanTool: Select rapifilt, prinseq, or fastx (default rapifilt)
+#te: remove n bases from the end <only for rapifilt>
+#tb: remove n bases from the begin <only for rapifilt>
+#lq: Set lef-cut value for quality scores (int default 30)
+#rq: Set right-cut value for quality scores (int default 30)
+#m:  Delete sequences with size minor that (int default 70)
+#wq: Winwdows to check quality (int defatult 2)
+#-cleanTool rapifilt
+#
+#################################################################################
+#Merge illunima files using FLASH tool
+#################################################################################
+#fb: Number of bases for set a merge (default 0)
+#
+#################################################################################
+#CLAME
+#################################################################################
+-bases 70,50
+-sizeBin 1000
+-ld 10
+#################################################################################
+#BLAST
+#################################################################################
+-database_nt /datma/nt
+#################################################################################
+#Assembler
+#################################################################################
+-assembly spades
+
