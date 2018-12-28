@@ -12,10 +12,10 @@ A bassic intallation can be done by (NO COMPSs support)
 1. clonning the DATMA directory 
 2. running the ./install_datma.sh script
 
-A bassic intallation can be done by (NO COMPSs support)
+A full intallation can be done by (COMPSs support)
 1. installing COMPSs framework
-1. clonning the DATMA directory 
-2. running the ./install_datma.sh script
+2. clonning the DATMA directory 
+3. running the ./install_datma.sh script
 
 ---------------------------------------------------------------
 FAQ
