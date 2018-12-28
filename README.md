@@ -9,15 +9,21 @@ DATMA is a distributed automatic pipeline for fast metagenomic analysis that inc
 Install
 ---------------------------------------------------------------
 A bassic intallation can be done by (NO COMPSs support)
-1. clonning the DATMA directory 
-2. running the ./install_datma.sh script
-3. export PATH=<install_path>/datma/tools/bin/:$PATH
+1. clonning the DATMA directory: 
+git clone https://github.com/dstreett/DATMA.git
+2. running the intall script:
+./install_datma.sh 
+3. exporting the PATH: 
+export PATH=<install_path>/datma/tools/bin/:$PATH
 
 A full intallation can be done by (COMPSs support)
-1. installing COMPSs framework
+1. installing COMPSs framework (see the COMPSs manual)
 2. clonning the DATMA directory 
+git clone https://github.com/dstreett/DATMA.git
 3. running the ./install_datma.sh script
-4. export PATH=<install_path>/datma/tools/bin/:$PATH
+./install_datma.sh 
+4. exporting the PATH:
+export PATH=<install_path>/datma/tools/bin/:$PATH
 
 ---------------------------------------------------------------
 FAQ
