@@ -3,7 +3,7 @@ Distributed AuTomatic Metagenomic Assembly and Annotation framework
 ---------------------------------------------------------------
 Introduction
 ---------------------------------------------------------------
-We introduce DATMA, a distributed automatic pipeline for fast metagenomic analysis that includes: sequencing quality control, 16S-identification, reads binning, de novo assembly, ORF detection and taxonomic annotation.
+DATMA is a distributed automatic pipeline for fast metagenomic analysis that includes: sequencing quality control, 16S-identification, reads binning, de novo assembly, ORF detection and taxonomic annotation.
 
 ---------------------------------------------------------------
 Install
