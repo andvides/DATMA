@@ -1,0 +1,5 @@
+#Build the FM-index 16sDatabase using the genFm9
+#here there is an example
+unzip rdp.zip
+genFm9 -multiFasta rdp.fna -output rdp
+
