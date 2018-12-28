@@ -18,9 +18,9 @@ export PATH=<install_path>/datma/tools/bin/:$PATH
 
 A full intallation can be done by (COMPSs support)
 1. installing COMPSs framework (see the COMPSs manual)
-2. clonning the DATMA directory 
+2. clonning the DATMA directory: 
 git clone https://github.com/dstreett/DATMA.git
-3. running the ./install_datma.sh script
+3. running the ./install_datma.sh script:
 ./install_datma.sh 
 4. exporting the PATH:
 export PATH=<install_path>/datma/tools/bin/:$PATH
