@@ -6,18 +6,21 @@
 
 #Install dependency
 sudo apt-get install libz-dev
+sudo apt-get install libboost-iostreams-dev
+sudo apt-get install build-essential cmake
 sudo apt-get install curl
 sudo apt install ant
+
+#Making the bin directory
+cd tools
+mkdir bin
+
 
 #SDLS-lite 
 git clone https://github.com/simongog/sdsl-lite.git
 cd sdsl-lite
 ./install.sh
 cd ..
-
-#Making the bin directory
-cd tools
-mkdir bin
 
 #install selectFasta
 cd selectFasta
@@ -34,7 +37,6 @@ make
 cd ..
 
 #install RAPIFILT
-cd tools
 cd rapifilt
 make
 cp rapifilt ../bin/
@@ -42,14 +44,12 @@ cd ..
 
 
 #install mapping (SDSL installed)
-cd tools
 cd mapping
 make
 cp mapping ../bin/
 cd ..
 
 #genFm9
-cd tools
 cd genFm9
 make
 cp genFm9 ../bin/
@@ -62,18 +62,17 @@ make
 cp flash2 ../bin/flash
 
 #CLAME
-cd tools
 cd CLAME
 make
 cp clame ../bin/
 cd ..
-
 
 #Megahit
 git clone https://github.com/voutcn/megahit.git
 cd megahit
 make
 cp megahit ../bin/ #posiblemente toque pegar los otros binarios
+cd ..
 
 #SPAdes
 wget http://cab.spbu.ru/files/release3.13.0/SPAdes-3.13.0.tar.gz
@@ -101,10 +100,11 @@ cp bin/* ../bin/
 cd ..
 
 #Prodigal
-https://github.com/hyattpd/Prodigal.git
+git clone https://github.com/hyattpd/Prodigal.git
 cd Prodigal/
 make
 cp prodigal ../bin/
+cd ..
 
 #krona 
 wget https://github.com/marbl/Krona/releases/download/v2.7/KronaTools-2.7.tar
@@ -126,4 +126,3 @@ update_blastdb.pl --decompress nt
 
 #FINISH
 echo 'DATMA INSTALLED'
-
