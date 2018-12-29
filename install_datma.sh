@@ -27,7 +27,7 @@ cd ..
 
 #rdp classifier
 git clone https://github.com/rdpstaff/RDPTools.git
-cd classifier/
+cd RDPTools/
 git submodule init
 git submodule update
 make
