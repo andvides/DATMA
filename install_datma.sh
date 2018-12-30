@@ -122,7 +122,7 @@ chmod +x bin/update_blastdb.pl
 cd ../
 mkdir blastdb
 cd blastdb
-update_blastdb.pl --decompress nt
-
+perl ../tools/bin/update_blastdb.pl --decompress nt
+cd ..
 #FINISH
 echo 'DATMA INSTALLED'
