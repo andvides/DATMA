@@ -26,27 +26,27 @@ class parameters:
     fb=5
     
     #16S-remove
-    database_16s_fasta='~/16sDatabase/rfam/RFAM_db.fasta'
-    database_16s_fm9='~/16sDatabase/rfam/rfam.fm9'
+    database_16s_fasta='~/DATMA/16sDatabases/ncbi/16SMicrobial.fasta'
+    database_16s_fm9='~/DATMA/16sDatabases/ncbi/ncbi.fm9'
     
     #CLAME parameters
     bases='70,60,50,40,30,20'
     base=70
     ld=2
-    sizeBin=10000
+    sizeBin=2000
     nu=3 
     w=0
     
     #Assembly options
-    assembly='velvet'	    
+    assembly='spades'	    
     assemblyOut='contigs.fa'    
     
     #BLAST
-    database_nt='~/nt'
-    database_nr='~/nr'
+    database_nt='~/DATMA/blastdb/nt'
+    database_nr='~/DATMA/blastdb/nr'
     
     #Kaiju
-    database_kaiju='~/kaijudb'
+    database_kaiju='~/DATMA/tools/kaiju/kaijudb'
     
 
 #Tools that compose the DATMA framework  
