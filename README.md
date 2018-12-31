@@ -49,6 +49,16 @@ report.html: Bins report
 resumenFile.html: Darma summarized report
 
 ---------------------------------------------------------------
+Authors
+---------------------------------------------------------------
+Benavides A(1), Sanchez F (2), Alzate JF (3),(4) and Cabarcas F (1),(3)
+
+Grupo Sistemic, Departamento de Ingeniería Electrónica, Facultad de Ingenieria, Universidad de Antioquia.
+Smart Variable S.L, Barcelona, Spain
+Centro Nacional de Secuenciacion Genomica-CNSG, Sede de Investigación Universitaria SIU, Universidad de Antioquia
+Grupo de Parasitología, Departamento de Microbiología y Parasitología, Facultad de Medicina, Universidad de Antioquia
+
+---------------------------------------------------------------
 FAQ
 --------------------------------------------------------------
 Please contact us:
