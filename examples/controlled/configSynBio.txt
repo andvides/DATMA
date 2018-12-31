@@ -10,8 +10,8 @@
 #-outputDir Full path and name forthe output directory, default ./output
 #
 -start_in 1
--inputFile /home/users/andresb/genomas/sintBio/metagenome/metagenome_1.fastq,/home/users/andresb/genomas/sintBio/metagenome/metagenome_2.fastq
--outputDir /home/users/andresb/datma/examples/sintBio2_flas5_test
+-inputFile ~/DATMA/examples/controlled/metagenome_1.fastq,~/DATMA/examples/controlled/metagenome_2.fastq
+-outputDir ~/DATMA/examples/controlled/sintBio2_test
 -cpus 8
 -typeReads illumina
 #Rapifilt
@@ -22,8 +22,8 @@
 #Flash
 -fb 5
 #16S remove
--database_16s_fasta  /home/users/andresb/16sDatabase/rfam/RFAM_db.fasta
--database_16s_fm9  /home/users/andresb/16sDatabase/rfam/rfam.fm9
+-database_16s_fasta  ~/DATMA/16sDatabases/ncbi/16SMicrobial.fasta
+-database_16s_fm9  ~/DATMA/16sDatabases//rfam/rfam.fm9
 #CLAME
 -bases 60,40,20
 -sizeBin 20000
@@ -31,7 +31,6 @@
 #assembler
 -assembly spades
 #Blast
--database_nt /home/db/NT/NT_May_2017/nt
+-database_nt ~/DATMA/blastdb/nt
 #Krona
 -combine
-
