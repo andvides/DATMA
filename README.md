@@ -26,6 +26,30 @@ git clone https://github.com/andvides/DATMA.git
 export PATH=<install_path>/datma/tools/bin/:$PATH
 
 ---------------------------------------------------------------
+Running
+---------------------------------------------------------------
+1. Generate the 16S database index
+cat <install_path>/datma/16sDatabases/README
+2. Edit the configBmini.txt
+nano <install_path>/datma/examples/configBmini.txt
+3. Run datma
+<install_path>/datma/runDATMA.sh <install_path>/datma/examples/configBmini.txt
+
+---------------------------------------------------------------
+Output
+---------------------------------------------------------------
+16sSeq: Directory with the identified 16S sequences
+bins: Assembly and annotation of the bins
+clean: Quality control report
+round_*: CLAME first execution
+round_*: CLAME second execution
+readsForbin.fastq: Balance of reads without classification
+binsBlastn.html: Blastn annotation for the contigs in Krona format
+binsKaiju.html: Kaiju annotation for the contigs in Krona format
+report.html: Bins report
+resumenFile.html: Darma summarized report
+
+---------------------------------------------------------------
 FAQ
 ---------------------------------------------------------------
 Please contact us:
