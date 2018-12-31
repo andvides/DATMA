@@ -38,11 +38,11 @@ nano <install_path>/datma/examples/configBmini.txt
 ---------------------------------------------------------------
 Output
 ---------------------------------------------------------------
+
 16sSeq: Directory with the identified 16S sequences
 bins: Assembly and annotation of the bins
 clean: Quality control report
-round_*: CLAME first execution
-round_*: CLAME second execution
+round: CLAME executions
 readsForbin.fastq: Balance of reads without classification
 binsBlastn.html: Blastn annotation for the contigs in Krona format
 binsKaiju.html: Kaiju annotation for the contigs in Krona format
