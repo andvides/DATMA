@@ -39,7 +39,7 @@ nano <install_path>/datma/examples/configBmini.txt
 Output
 ---------------------------------------------------------------
 
-16sSeq: Directory with the identified 16S sequences
+16sSeq: Directory with the identified 16S sequences\n
 bins: Assembly and annotation of the bins
 clean: Quality control report
 round: CLAME executions
