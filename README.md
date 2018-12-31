@@ -53,10 +53,10 @@ Authors
 ---------------------------------------------------------------
 Benavides A(1), Sanchez F (2), Alzate JF (3),(4) and Cabarcas F (1),(3)
 
-Grupo Sistemic, Departamento de Ingeniería Electrónica, Facultad de Ingenieria, Universidad de Antioquia.
-Smart Variable S.L, Barcelona, Spain
-Centro Nacional de Secuenciacion Genomica-CNSG, Sede de Investigación Universitaria SIU, Universidad de Antioquia
-Grupo de Parasitología, Departamento de Microbiología y Parasitología, Facultad de Medicina, Universidad de Antioquia
+1. Grupo Sistemic, Departamento de Ingeniería Electrónica, Facultad de Ingenieria, Universidad de Antioquia.
+2. Smart Variable S.L, Barcelona, Spain
+3. Centro Nacional de Secuenciacion Genomica-CNSG, Sede de Investigación Universitaria SIU, Universidad de Antioquia
+4. Grupo de Parasitología, Departamento de Microbiología y Parasitología, Facultad de Medicina, Universidad de Antioquia
 
 ---------------------------------------------------------------
 FAQ
