@@ -5,6 +5,8 @@
 #
 
 #Install dependency
+#If you are using a different Linux distribution than Ubuntu
+#please modify the next lines according your distribution
 sudo apt-get install libz-dev
 sudo apt-get install libboost-iostreams-dev
 sudo apt-get install build-essential cmake
