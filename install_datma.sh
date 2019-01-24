@@ -96,6 +96,10 @@ git clone https://github.com/bioinformatics-centre/kaiju.git
 cd kaiju/src/
 make
 cd ..
+mkdir kaijudb
+cd kaijudb
+../bin/makeDB.sh -r
+cd ..
 cp bin/* ../bin/
 cd ..
 
