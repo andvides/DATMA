@@ -99,6 +99,10 @@ cd ..
 mkdir kaijudb
 cd kaijudb
 ../bin/makeDB.sh -r
+rm -r genomes/
+rm kaiju_db.bwt
+rm kaiju_db.faa
+rm kaiju_db.sa
 cd ..
 cp bin/* ../bin/
 cd ..
