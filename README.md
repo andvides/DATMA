@@ -61,6 +61,6 @@ Benavides A(1), Sanchez F (2), Alzate JF (3),(4) and Cabarcas F (1),(3)
 ---------------------------------------------------------------
 FAQ
 --------------------------------------------------------------
-Please contact us:
- bernardo.benavides@udea.edu.co
- felipe.cabarcas@udea.edu.co
+Please contact us:<br/>
+bernardo.benavides@udea.edu.co<br/>
+felipe.cabarcas@udea.edu.co
