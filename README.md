@@ -29,11 +29,11 @@ export PATH=<install_path>/datma/tools/bin/:$PATH
 Running
 --------------------------------------------------------------
 1. Generate the 16S database index:
-see <install_path>/datma/16sDatabases/README
+ see <install_path>/datma/16sDatabases/README
 2. Edit the configBmini.txt:
-nano <install_path>/datma/examples/configBmini.txt
+ nano <install_path>/datma/examples/configBmini.txt
 3. Run datma:
-<install_path>/datma/runDATMA.sh <install_path>/datma/examples/configBmini.txt
+ <install_path>/datma/runDATMA.sh <install_path>/datma/examples/configBmini.txt
 
 ---------------------------------------------------------------
 Output
