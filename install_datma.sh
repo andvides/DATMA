@@ -62,6 +62,7 @@ git clone https://github.com/dstreett/FLASH2.git
 cd FLASH2
 make
 cp flash2 ../bin/flash
+cd ..
 
 #CLAME
 cd CLAME
