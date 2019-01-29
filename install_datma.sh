@@ -82,6 +82,8 @@ wget http://cab.spbu.ru/files/release3.13.0/SPAdes-3.13.0.tar.gz
 tar -xzf SPAdes-3.13.0.tar.gz
 cd SPAdes-3.13.0
 sudo ./spades_compile.sh
+pwd=`pwd`
+ln -s $pwd/spades.py ../bin/
 cd ..
 
 #Velvet
