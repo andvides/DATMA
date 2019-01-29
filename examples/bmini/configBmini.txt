@@ -31,9 +31,9 @@
 #################################################################################
 #16S-REMOVE
 #################################################################################
--database_16s_fasta '~/DATMA/16sDatabases/ncbi/16SMicrobial.fasta'
--database_16s_fm9 '~/DATMA/16sDatabases/ncbi/ncbi.fm9'
--RDP_path '~/DATMA/tools/RDPTools'
+-database_16s_fasta '<intallPath>/DATMA/16sDatabases/ncbi/16SMicrobial.fasta'
+-database_16s_fm9 '<intallPath>/DATMA/16sDatabases/ncbi/ncbi.fm9'
+-RDP_path '<intallPath>/DATMA/tools/RDPTools'
 #################################################################################
 #CLAME
 #################################################################################
