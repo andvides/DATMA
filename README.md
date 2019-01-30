@@ -6,7 +6,7 @@ Introduction
 DATMA is a distributed automatic pipeline for fast metagenomic analysis that includes: sequencing quality control, 16S-identification, reads binning, de novo assembly, ORF detection and taxonomic annotation.
 
 --------------------------------------------------------------
-Install
+Installing DATMA
 --------------------------------------------------------------
 NON distributed version installation (NON COMPSs support)<br/>
 1. Clone the DATMA directory:<br/> 
@@ -26,7 +26,7 @@ bash install_datma.sh
 export PATH=<install_path>/DATMA/tools/bin/:$PATH
 
 ---------------------------------------------------------------
-Execution
+Running DATMA
 --------------------------------------------------------------
 1. Generate the 16S database index:<br/>
 see <install_path>/DATMA/16sDatabases/README
