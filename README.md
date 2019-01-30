@@ -8,32 +8,32 @@ DATMA is a distributed automatic pipeline for fast metagenomic analysis that inc
 --------------------------------------------------------------
 Install
 --------------------------------------------------------------
-A bassic intallation can be done by (NO COMPSs support)
-1. clonning the DATMA directory:<br/> 
+NON distributed version installation (NON COMPSs support)<br/>
+1. Clone the DATMA directory:<br/> 
 git clone https://github.com/andvides/DATMA.git
-2. running the intall script:<br/>
-./install_datma.sh 
-3. exporting the PATH:<br/> 
+2. Run the ./install_datma.sh script:<br/>
+bash install_datma.sh 
+3. Export the PATH:<br/> 
 export PATH=<install_path>/DATMA/tools/bin/:$PATH
 
-A full intallation can be done by (COMPSs support)<br/>
-1. installing COMPSs framework (see the COMPSs manual)
-2. clonning the DATMA directory:<br/> 
+Distributed version installation (COMPSs support)<br/>
+1. Intall COMPSs framework (see the COMPSs manual)
+2. Clone the DATMA directory:<br/> 
 git clone https://github.com/andvides/DATMA.git
-3. running the ./install_datma.sh script:<br/>
-./install_datma.sh 
-4. exporting the PATH:<br/>
+3. Run the ./install_datma.sh script:<br/>
+bash install_datma.sh 
+4. Export the PATH:<br/>
 export PATH=<install_path>/DATMA/tools/bin/:$PATH
 
 ---------------------------------------------------------------
-Running
+Execution
 --------------------------------------------------------------
 1. Generate the 16S database index:<br/>
 see <install_path>/DATMA/16sDatabases/README
 2. Edit the configBmini.txt:<br/>
 nano <install_path>/DATMA/examples/configBmini.txt
-3. Run datma:<br/>
-<install_path>/DATMA/runDATMA.sh <install_path>/datma/examples/configBmini.txt
+3. Run datma and select version (seq) or (compss):<br/>
+<install_path>/DATMA/runDATMA.sh <install_path>/datma/examples/configBmini.txt seq
 
 ---------------------------------------------------------------
 Output
