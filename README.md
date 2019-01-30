@@ -14,7 +14,7 @@ git clone https://github.com/andvides/DATMA.git
 2. running the intall script:<br/>
 ./install_datma.sh 
 3. exporting the PATH:<br/> 
-export PATH=<install_path>/datma/tools/bin/:$PATH
+export PATH=<install_path>/DATMA/tools/bin/:$PATH
 
 A full intallation can be done by (COMPSs support)<br/>
 1. installing COMPSs framework (see the COMPSs manual)
@@ -23,17 +23,17 @@ git clone https://github.com/andvides/DATMA.git
 3. running the ./install_datma.sh script:<br/>
 ./install_datma.sh 
 4. exporting the PATH:<br/>
-export PATH=<install_path>/datma/tools/bin/:$PATH
+export PATH=<install_path>/DATMA/tools/bin/:$PATH
 
 ---------------------------------------------------------------
 Running
 --------------------------------------------------------------
 1. Generate the 16S database index:<br/>
-see <install_path>/datma/16sDatabases/README
+see <install_path>/DATMA/16sDatabases/README
 2. Edit the configBmini.txt:<br/>
-nano <install_path>/datma/examples/configBmini.txt
+nano <install_path>/DATMA/examples/configBmini.txt
 3. Run datma:<br/>
-<install_path>/datma/runDATMA.sh <install_path>/datma/examples/configBmini.txt
+<install_path>/DATMA/runDATMA.sh <install_path>/datma/examples/configBmini.txt
 
 ---------------------------------------------------------------
 Output
