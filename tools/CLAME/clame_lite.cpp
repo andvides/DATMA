@@ -83,6 +83,23 @@ bool readArguments(int argc,char *argv[], Args *args,Names *names, Parameters *p
             found1 = true;
             continue;
         }
+        if ( IsParam(argv[argum],"-tol") ) //MAD tol
+        {
+            argum ++;
+            if (argum < argc)  
+            {
+                args->tol = true;
+                std::string::size_type sz;     
+                parameters->tol = std::stof (argv[argum],&sz);
+                //cout<<"edges:"<<parameters->edges<<endl;
+           } 
+            else 
+                error = true;
+         
+            argum ++;
+            found1 = true;
+            continue;
+        }
         if ( IsParam(argv[argum],"-w") ) // windows offset to start the alignemnt
         {
             argum ++;
@@ -600,9 +617,9 @@ void binningPrint(Names *names, Parameters *parameters, vector<string> *title, i
                 int *stack2 = new int[size] ();
                 int itertation=0;
                 //float error=abs(stadistic[6]-1);
-                float tol=2.0;////0.5;
+                float tol=parameters->tol;//2.0;////0.5;
                 float red=0.25;
-                while((abs(stadistic[6]-1.0)>tol) && (cut>0 ) && (size>1))//while(stadistic[6]>1 && cut>0)
+                while((abs(stadistic[6]-1.0)>tol) && (cut>0 ) && (size>1) && stadistic[6]>1.0)//while(stadistic[6]>1 && cut>0)
                 {
         
                     //Number of links by read
@@ -861,6 +878,7 @@ void printerror(const char arg[])
     cout << "  -h\t\t\t(Help)" << endl;
     cout << "  -b minimum number of bases to take an alignment (default 70) " << endl;
     cout << "  -e normal cut point for notmal test (default 3) " << endl;
+    cout << "  -tol MAD error tolerance (default 0.5) " << endl;
     cout << "  -fm9 Load fm9 file  " << endl;
     cout << "  -fastq input file is in a fastq format  " << endl;
     cout << "  -fr disable forward or reverse search in the alignemnt (f=forwar, r=reverse, fr=forwar and reverse (default)) " << endl;
@@ -874,9 +892,3 @@ void printerror(const char arg[])
     cout << ""<< endl;
 
 }
-
-
-
-
-
-
