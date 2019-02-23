@@ -53,9 +53,9 @@ using std::tr1::unordered_map;
 using namespace sdsl;
 using namespace std;
 
-struct Args {bool multiFasta; bool fastq; bool outputFile; bool numT; bool bases_Threshold; bool print; bool fm9; bool edges; bool sizeBin; bool ld; bool w; bool forward_reverse;};
+struct Args {bool multiFasta; bool fastq; bool outputFile; bool numT; bool bases_Threshold; bool print; bool fm9; bool edges; bool tol; bool sizeBin; bool ld; bool w; bool forward_reverse;};
 struct Names {string multiFasta; string outputFile; string fm9;};
-struct Parameters {float edges; int numThreads; int query_size; bool enablePrint; bool loadFM9;int sizeBin;bool fastq; int  ld; int w; string forward_reverse;};
+struct Parameters {float edges; float tol; int numThreads; int query_size; bool enablePrint; bool loadFM9;int sizeBin;bool fastq; int  ld; int w; string forward_reverse;};
 
 string reverse(string str);
 int mstrlen(const char arg[]);
@@ -71,5 +71,3 @@ uint32_t indx2Loc(uint32_t locs, vector<uint32_t> *index);
 void binning(Names *names, Parameters *parameters, vector<string> *title, int *queryList, vector<int> *MatrixList, int numberOFreads);
 void binningPrint(Names *names, Parameters *parameters, vector<string> *title, int *queryList, vector<int> *MatrixList, int numberOFreads, vector<string> *bases,vector<string> *qual);
 void static_parameters(int *stack, int size, vector<int> *MatrixList, int *queryList, int numBin, int *maximun, int *minimum, float cut, float *stadistic) ;
-
-
