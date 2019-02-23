@@ -37,11 +37,11 @@ int main(int argc,char *argv[])
         cout<<"CLAME version_2.2 25/09/2017"<<endl;
         cout<<"Debug enable"<<endl;
     #endif
-    //Args {bool multiFasta; bool fastq; bool outputFile; bool numT; bool bases_Threshold; bool print; bool fm9; bool edges; bool sizeBin; bool ld; bool w;bool forward_reverse;};    
-    Args   args = {false,false,false,false,false,false,false,false,false,false,false,false};
+    //Args {bool multiFasta; bool fastq; bool outputFile; bool numT; bool bases_Threshold; bool print; bool fm9; bool edges; bool tol; bool sizeBin; bool ld; bool w;bool forward_reverse;};    
+    Args   args = {false,false,false,false,false,false,false,false,false,false,false,false,false};
     Names  names;
-    //struct Parameters {float edges; int numThreads; int query_size; bool enablePrint; bool loadFM9;int sizeBin; bool fastq; int ld; int w; string forward_reverse;};
-    Parameters parameters={3.0,1,70,false,false,1000,false,2,0,"fr"};
+    //struct Parameters {float edges; float tol; int numThreads; int query_size; bool enablePrint; bool loadFM9;int sizeBin; bool fastq; int ld; int w; string forward_reverse;};
+    Parameters parameters={3.0,0.5,1,70,false,false,1000,false,2,0,"fr"};
     names.outputFile="output";
     
 
