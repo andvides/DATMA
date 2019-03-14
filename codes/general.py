@@ -54,7 +54,7 @@ class parameters:
 #all the tools need to be added to user PATH
 class tools:
     manual = 'save the tools names'
-    names=['selectFasta','rapifilt','mapping','genFm9','flash','clame','megahit','spades.py','velvetg','blastn','kaiju','prodigal','ktImportBLAST']
+    names=['selectFasta','rapifilt','bwa','samtools','mapping','genFm9','flash','clame','megahit','spades.py','velvetg','blastn','kaiju','prodigal','ktImportBLAST']
 
 #Directorie path for the outputs
 class directories:
@@ -180,7 +180,7 @@ def readConfigFile(fileName, param):
             param.assembly=words[1]
         
         #Kaiju parameters
-        elif line.startswith('-kd'):
+        elif line.startswith('-database_kaiju'):
             param.database_kaiju=words[1]
     fsrc1.close()
 
