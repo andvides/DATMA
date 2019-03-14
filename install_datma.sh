@@ -14,6 +14,10 @@ sudo apt-get install build-essential cmake
 sudo apt-get install curl
 sudo apt install ant
 
+sudo apt-get update -y
+sudo apt-get install -y bwa
+sudo apt-get install samtools
+
 #Making the bin directory
 cd tools
 mkdir bin
