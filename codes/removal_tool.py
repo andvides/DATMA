@@ -31,7 +31,25 @@ def seq_16Sremoval(direct,param,outName,flags):
             print 'Quality Filter stage:ERROR IN THE CONFIGURATION FILE'
             print "Unknown reads' format"
             sys.exit(0)
+            
+        #Mapping the clean reads against the 16S_database
+        cmd='bwa mem -t '+cpus+' '+database_fasta+' '+inputFile+"."+typeReads+' > temp_BWA.sam'
+        print cmd
+        os.system(cmd)
         
+        cmd='samtools view -S -F4 temp_BWA.sam > temp_BWA.map'
+        print cmd
+        os.system(cmd)
+
+        cmd="awk '{print $1}' temp_BWA.map > "+outFile+'.list'
+        print cmd
+        os.system(cmd)
+
+        cmd='rm temp_BWA*'
+        print cmd
+        os.system(cmd)
+
+        """
         #Mapping the clean reads against the 16S_database
         mapping2FM9(cpus,inputFile+"."+typeReads,outFile+"_1",typeReads,database_fm9,'-print')
         cmd= "awk '{print $1}' "+outFile+"_1.links | awk -F '"+firstC+"' '{print $2}' > "+outFile+'_1.list'
@@ -59,6 +77,7 @@ def seq_16Sremoval(direct,param,outName,flags):
         cmd="rm "+cleanFM9
         print cmd
         os.system(cmd) 
+        """
         
         #Recovery the sequences names
         recoverySeq(outFile+".list",inputFile+"."+typeReads,outFile,typeReads,"-fasta_sel")    
@@ -127,6 +146,3 @@ def decoseq(firstC,index,result,outFile):
             fsrc2.write(name+'\n')
     fsrc2.close()
     fsrc3.close()
-
-    
-
