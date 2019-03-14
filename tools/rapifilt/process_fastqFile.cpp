@@ -64,7 +64,7 @@ void process_fastqFile(struct Args * args, struct Names * names)
 	
     bool next=true, save=true;
     //char word1='\0', word2='\0'; 
-    string name1=" ", aux1=""; 
+    string name1="", aux1=""; 
     vector<char> bases1;
     vector<char> quality1;
     vector<unsigned int> quality1_int;
