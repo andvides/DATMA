@@ -85,6 +85,11 @@ def readConfigFile(fileName, param):
                 print "unsupported reads' format"
         elif line.startswith('-combine'): 
             param.combine='-c' 
+
+def runCheckM (cpus,binDir,checkmDir):
+    cmd='checkm lineage_wf -t '+str(cpus)+' '+binDir+' '+checkmDir
+    print cmd
+    os.system(cmd)
             
 class parameters:
     manual = 'save the basic inputs'
@@ -111,6 +116,13 @@ if __name__ == "__main__":
     if args.file :
         readConfigFile(args.file,param)    
         directory=param.outputFile
+        
+        #CheckM
+        binDir=directory+'/bins/'
+        checkmDir=directory+'/checkm_out/'
+        runCheckM (param.cpus,binDir,checkmDir)
+        
+        #Run Krona
         combine=param.combine
         reportFile= directory+'/report.html'
         
@@ -234,5 +246,3 @@ if __name__ == "__main__":
         file = open(resumenFile, 'w')
         file.write(joinHtml())
         file.close()
-
-
