@@ -22,6 +22,10 @@ sudo apt-get install samtools
 cd tools
 mkdir bin
 
+#Trimmomatic
+wget http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.38.zip
+unzip Trimmomatic-0.38.zip
+
 #SDLS-lite 
 echo 'Installing FM-index library'
 git clone https://github.com/simongog/sdsl-lite.git
