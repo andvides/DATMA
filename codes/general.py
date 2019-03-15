@@ -14,6 +14,7 @@ class parameters:
     typeReads='sff'
 
     #Quality Control
+    trimmomatic_path='~/DATMA/tools/bin/'
     cleanTool='rapifilt'
     te=0    
     tb=0    
@@ -129,6 +130,8 @@ def readConfigFile(fileName, param):
                 sys.exit(0)
         
         #Quality control tools
+        elif line.startswith('-trimmomatic_path'):
+            param.trimmomatic_path=words[1]
         elif line.startswith('-cleanTool'):
             param.cleanTool=words[1]    
         elif line.startswith('-te'):
