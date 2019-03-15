@@ -11,6 +11,8 @@ def cleanReads(direct,param,outName,flags):
     cpus=param.cpus
     typeReads=param.typeReads
     cleanTool=str(param.cleanTool)
+    trimmomatic_path=param.trimmomatic_path
+
     te=str(param.te)
     tb=str(param.tb)
     lq=str(param.lq)
@@ -37,8 +39,14 @@ def cleanReads(direct,param,outName,flags):
                 sys.exit(10)
         elif typeReads=='illumina':
             files=inputFile.split(',')
+            #update the format for the next stages
+            param.typeReads='fastq'
             if(cleanTool=='prinseq'):
                 cmd='prinseq-lite.pl -fastq  '+files[0]+' -fastq2 '+files[1]+' -out_format 3 -no_qual_header -out_good '+outputFile+' -out_bad null -min_len '+m+' -rm_header -trim_qual_right '+rq+' -trim_qual_left '+lq+' -trim_qual_type min  -trim_qual_window '+w
+                print cmd
+                os.system(cmd) 
+            elif(cleanTool=='trimmomatic'):
+                cmd='java -jar '+trimmomatic_path+'trimmomatic'+' PE -phred33 -threads '+cpus+' '+files[0]+' '+files[1]+' '+outputFile+'.'+param.typeReads+' LEADING:'+lq+' TRAILING:'+rq+'  MINLEN:'+m
                 print cmd
                 os.system(cmd) 
             elif(cleanTool=='fastx'): #Fastx: NO pair end ouput, no left cut, no windows otion Q33 format
@@ -56,9 +64,6 @@ def cleanReads(direct,param,outName,flags):
             cmd='mv '+directory+'/'+temName+'.extendedFrags.fastq '+directory+'/'+outName.clean+'.fastq'
             print cmd
             os.system(cmd)
-            #update the format for the next stages
-            param.typeReads='fastq'
-            
         elif typeReads=='fastq':
             if(cleanTool=='prinseq'):
                 cmd='prinseq-lite.pl -fastq  '+inputFile+' -out_format 3 -no_qual_header -out_good '+outputFile+' -out_bad null -min_len '+m+' -rm_header -trim_qual_right '+rq+' -trim_qual_left '+lq+' -trim_qual_type min  -trim_qual_window '+w
@@ -68,6 +73,10 @@ def cleanReads(direct,param,outName,flags):
                 cmd='fastq_quality_trimmer -t '+rq+' -i '+inputFile+' -o '+outputFile+'.fastq -Q 33 -l '+m 
                 print cmd
                 os.system(cmd)  
+            elif(cleanTool=='trimmomatic'):
+                cmd='java -jar '+trimmomatic_path+'trimmomatic'+' SE -phred33 -threads '+cpus+' '+inputFile+' '+outputFile+'.'+param.typeReads+' LEADING:'+lq+' TRAILING:'+rq+'  MINLEN:'+m
+                print cmd
+                os.system(cmd) 
             else:#(cleanTool=='rapifilt') default tool    
                 cmd='rapifilt -fastq '+inputFile+' -o '+outputFile+' -tb '+tb+' -te '+te+' -l '+lq+' -r '+rq+' -m '+m+' -w '+w
                 print cmd
