@@ -14,7 +14,7 @@ class parameters:
     typeReads='sff'
 
     #Quality Control
-    trimmomatic_path='~/DATMA/tools/bin/'
+    trimmomatic_path='~/DATMA/tools/Trimmomatic-0.38/'
     cleanTool='rapifilt'
     te=0    
     tb=0    
