@@ -109,6 +109,7 @@ if __name__ == "__main__":
             suffix=suffix[-2]+'_'+suffix[-1]
             
             contigsFile=binDir+suffix+'_contigs.fna'
+            contigsFile_stat=binDir+suffix+'_contigs_qual.html'
             orfsFile=binDir+suffix+'_orfsFile.faa'
             blastFile=binDir+suffix+'_blastFile.tab'
             database_nt=param.database_nt
@@ -116,7 +117,7 @@ if __name__ == "__main__":
             database_kaiju=param.database_kaiju
             reportFileTemp=binDir+suffix+'_report.txt'
             
-            assembly_annotation(str(suffix),str(prefix),fileName,binName,contigsFile,orfsFile,blastFile,str(database_nt),kaijuFile,str(database_kaiju),str(param.cpus),param.assembly)
+            assembly_annotation(str(suffix),str(prefix),fileName,binName,contigsFile,contigsFile_stat,orfsFile,blastFile,str(database_nt),kaijuFile,str(database_kaiju),str(param.cpus),param.assembly)
     
         print 'END DATMA WORK FLOW'
         print time.time() - start_time, "seconds"
@@ -125,5 +126,3 @@ if __name__ == "__main__":
         print description
         print epilog
         
-        
-
