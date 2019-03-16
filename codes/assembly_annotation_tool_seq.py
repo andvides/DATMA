@@ -33,9 +33,9 @@ def assembly_annotation(suffix,prefix,fileName,binName,contigsFile,contigsFile_s
     #assembler quality
     inputFile=outputFile+'/'+assemblyOut
     dir_out=directory+'/quast'
-    ass_quast(inputFile,outputFile,False," ")
+    ass_quast(inputFile,dir_out,False," ")
     
-    cmd='cat '+dir_out+'/quast/report.html > '+contigsFile_stat
+    cmd='cat '+dir_out+'/report.html > '+contigsFile_stat
     os.system(cmd) 
     
     #Open reading frames compute
