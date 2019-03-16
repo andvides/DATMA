@@ -4,11 +4,11 @@ import os, glob
 
 #from pycompss.api.task import task
 #from pycompss.api.parameter import *
-#@task(fileName=FILE,binName=FILE, contigsFile=FILE_OUT, orfsFile=FILE_OUT, blastFile=FILE_OUT, kaijuFile=FILE_OUT)
-def assembly_annotation(suffix,prefix,fileName,binName,contigsFile,orfsFile,blastFile,database_nt,kaijuFile,database_kaiju,cpus,assembler):
+#@task(fileName=FILE,binName=FILE, contigsFile=FILE_OUT, contigsFile_stat=FILE_OUT, orfsFile=FILE_OUT, blastFile=FILE_OUT, kaijuFile=FILE_OUT)
+def assembly_annotation(suffix,prefix,fileName,binName,contigsFile,contigsFile_stat,orfsFile,blastFile,database_nt,kaijuFile,database_kaiju,cpus,assembler):
     
     """++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"""
-    #Edit these lines if the database_nt and database_kaiju directories are different in the workerers
+    #Edit these lines if the database_nt and database_kaiju directories are different in the workers
     """++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"""
     database_nt_worker=database_nt;#full path to the nt database
     database_kaiju_worker=database_kaiju;#full path to the kaiju database
@@ -30,6 +30,14 @@ def assembly_annotation(suffix,prefix,fileName,binName,contigsFile,orfsFile,blas
     cmd='cat '+outputFile+'/'+assemblyOut+' > '+contigsFile
     os.system(cmd) 
 
+    #assembler quality
+    inputFile=outputFile+'/'+assemblyOut
+    dir_out=directory+'/quast'
+    ass_quast(inputFile,outputFile,False," ")
+    
+    cmd='cat '+dir_out+'/quast/report.html > '+contigsFile_stat
+    os.system(cmd) 
+    
     #Open reading frames compute
     inputFile=outputFile+'/'+assemblyOut
     outputName=directory+'/orfs'
@@ -101,6 +109,17 @@ def assembly(cpus,assemblyTool,typeReads,inputName,outputName):
 
     print "PASS 4: assembling ... DONE"
 
+#assembler quality
+def ass_quast(cotigs_in,dir_out,ref,ref_name):
+    if ref:
+        cmd='quast.py -o '+dir_out+' '+cotigs_in+' -r '+ref_name 
+        print cmd
+        os.system(cmd)
+    else:
+        cmd='quast.py -o '+dir_out+' '+cotigs_in
+        print cmd
+        os.system(cmd)
+
 
 #Open reading frames compute
 def orfs(inputName,outputName):
@@ -155,8 +174,3 @@ def makeReport(typeReads,inputName):
         return str(count),str(bases)
     else:
         return str('Error'),str(inputName)
-    
-    
-    
-    
-    
