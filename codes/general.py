@@ -55,7 +55,7 @@ class parameters:
 #all the tools need to be added to user PATH
 class tools:
     manual = 'save the tools names'
-    names=['selectFasta','rapifilt','trimmomatic','flash',
+    names=['selectFasta','rapifilt','flash',
            'bwa','samtools','mapping','genFm9','clame',
            'megahit','spades.py','velvetg',
            'blastn','kaiju','quast.py','prodigal',
