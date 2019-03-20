@@ -22,14 +22,17 @@ class parameters:
     rq=30   
     m=70    
     wq=2    
-
+    quality_aux=""
+    
     #Flash
     fb=5
+    flash_aux=""
     
     #16S-remove
     database_16s_fasta='~/DATMA/16sDatabases/ncbi/16SMicrobial.fasta'
     database_16s_fm9='~/DATMA/16sDatabases/ncbi/ncbi.fm9'
     RDP_path='~/DATMA/tools/RDPTools'
+    aux_16s=""
     
     #CLAME parameters
     bases='70,60,50,40,30,20'
@@ -38,18 +41,26 @@ class parameters:
     sizeBin=2000
     nu=3 
     w=0
+    clame_aux=""
     
     #Assembly options
     assembly='spades'	    
     assemblyOut='contigs.fa'    
+    asm_aux=""
+    
+    #quast
+    use_ref=False
+    ref_name=' '
+    quast_aux=""
     
     #BLAST
     database_nt='~/DATMA/blastdb/nt'
     database_nr='~/DATMA/blastdb/nr'
+    blast_aux=""
     
     #Kaiju
     database_kaiju='~/DATMA/tools/kaiju/kaijudb'
-    
+    kaiju_aux=""
 
 #Tools that compose the DATMA framework  
 #all the tools need to be added to user PATH
@@ -150,10 +161,14 @@ def readConfigFile(fileName, param):
             param.m=int(words[1])
         elif line.startswith('-wq'):
             param.wq=int(words[1])
+        elif line.startswith('-quality_aux'):
+            param.quality_aux=words[1]
 
         #Flash
         elif line.startswith('-fb'):
-            param.fb=int(words[1])                
+            param.fb=int(words[1]) 
+        elif line.startswith('-flash_aux'):
+            param.flash_aux=words[1]            
         
         #16S parameters
         elif line.startswith('-database_16s_fasta'):
@@ -162,6 +177,8 @@ def readConfigFile(fileName, param):
             param.database_16s_fm9=words[1]
         elif line.startswith('-RDP_path'):
             param.RDP_path=words[1]
+        elif line.startswith('-aux_16s'):
+            param.aux_16s=words[1]
             
         #CLAME parameters        
         elif line.startswith('-bases'):            
@@ -175,20 +192,36 @@ def readConfigFile(fileName, param):
             param.w=int(words[1])
         elif line.startswith('-nu'):
             param.nu=float(words[1])
+        elif line.startswith('-clame_aux'):
+            param.clame_aux=words[1]
             
         #BLAST parameters
         elif line.startswith('-database_nt'):
             param.database_nt=words[1]
         elif line.startswith('-database_nr'):
             param.database_nr=words[1]
-        
+        elif line.startswith('-blast_aux'):
+            param.blast_aux=words[1]
+            
+        #quast
+        elif line.startswith('-use_ref'):
+            param.use_ref=True
+            param.ref_name=words[1]
+        elif line.startswith('-quast_aux'):
+            param.quast_aux=words[1]
+            
         #Assembler parameters
         elif line.startswith('-assembly'):
             param.assembly=words[1]
-        
+        elif line.startswith('-asm_aux'):
+            param.asm=words[1]
+            
         #Kaiju parameters
         elif line.startswith('-database_kaiju'):
             param.database_kaiju=words[1]
+        elif line.startswith('-kaiju_aux'):
+            param.kaiju_aux=words[1]
+            
     fsrc1.close()
 
     if error: #NO madatory inputs 
