@@ -1,7 +1,3 @@
-#Build the FM-index 16sDatabase using the genFm9
-#here there is an example
-unzip rdp.zip
-cd rpd
-genFm9 -multiFasta rdp.fna -output rdp
-or 
-bwa index  rdp.fna
+Run the build16S_database.sh script
+Example:
+bash build_16S_dataBase.sh ./rdp bwa
