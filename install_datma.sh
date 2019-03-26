@@ -8,15 +8,24 @@
 #If you are using a different Linux distribution than Ubuntu
 #please modify the next lines according your distribution
 echo 'Installing dependencies'
+sudo apt-get update -y
 sudo apt-get install libz-dev
 sudo apt-get install libboost-iostreams-dev
 sudo apt-get install build-essential cmake
 sudo apt-get install curl
 sudo apt install ant
+sudo apt-get install zlib1g-dev
+sudo apt-get install -y pkg-config libfreetype6-dev libpng-dev python-matplotlib
+sudo pip install numpy
 
-sudo apt-get update -y
+#install BWA
 sudo apt-get install -y bwa
+
+#install SAM Tools
 sudo apt-get install samtools
+
+#install CheckM
+sudo pip install checkm-genome
 
 #Making the bin directory
 cd tools
@@ -54,6 +63,13 @@ echo 'Installing RAPIFILT'
 cd rapifilt
 make
 cp rapifilt ../bin/
+cd ..
+
+#install mergeNotCombined
+echo 'Installing mergeNotCombined'
+cd mergeNotCombined
+make
+cp mergeNotCombined ../bin/
 cd ..
 
 #install mapping (SDSL installed)
@@ -109,6 +125,14 @@ git clone https://github.com/dzerbino/velvet.git
 cd velvet
 make
 cp velvet* ../bin/
+cd ..
+
+#QUAST
+echo 'Installing QUAST tool'
+wget https://downloads.sourceforge.net/project/quast/quast-5.0.2.tar.gz
+tar -xzf quast-5.0.2.tar.gz
+cd quast-5.0.2
+sudo ./setup.py install_full
 cd ..
 
 #Prodigal
