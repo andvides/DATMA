@@ -92,6 +92,10 @@ def runCheckM (cpus,binDir,checkmDir,checkm_aux):
     cmd='checkm lineage_wf -t '+str(cpus)+' '+binDir+' '+checkmDir+' '+checkm_aux
     print cmd
     os.system(cmd)
+    
+    cmd='checkm qa '+checkmDir+'lineage.ms '+checkmDir+' > '+checkmDir+'resumenCheckM.txt'
+    print cmd
+    os.system(cmd)
             
 class parameters:
     manual = 'save the basic inputs'
@@ -124,6 +128,7 @@ if __name__ == "__main__":
         binDir=directory+'/bins/'
         checkmDir=directory+'/checkm_out/'
         runCheckM (param.cpus,binDir,checkmDir,checkm_aux)
+
         
         #Run Krona
         combine=param.combine
