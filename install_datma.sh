@@ -26,6 +26,8 @@ sudo apt-get install samtools
 
 #install CheckM
 sudo pip install checkm-genome
+sudo pip install checkm-genome --upgrade --no-deps
+sudo checkm data update
 
 #Making the bin directory
 cd tools
