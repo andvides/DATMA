@@ -38,6 +38,9 @@ def cleanReads(direct,param,outName,flags):
             else:
                 print "ERROR: Format not supported by the quality control tool"
                 sys.exit(10)
+            cmd='fastqc '+directory+'/'+outName.clean+'.fastq'+' -o '+directory+'/'
+            print cmd
+            os.system(cmd) 
         elif typeReads=='illumina':
             files=inputFile.split(',')
             #update the format for the next stages
@@ -65,6 +68,10 @@ def cleanReads(direct,param,outName,flags):
             cmd='mv '+directory+'/'+temName+'.extendedFrags.fastq '+directory+'/'+outName.clean+'.fastq'
             print cmd
             os.system(cmd)
+            
+            cmd='fastqc '+directory+'/'+outName.clean+'.fastq'+' -o '+directory+'/'
+            print cmd
+            os.system(cmd) 
         elif typeReads=='fastq':
             if(cleanTool=='prinseq'):
                 cmd='prinseq-lite.pl -fastq  '+inputFile+' -out_format 3 -no_qual_header -out_good '+outputFile+' -out_bad null -min_len '+m+' -rm_header -trim_qual_right '+rq+' -trim_qual_left '+lq+' -trim_qual_type min  -trim_qual_window '+w+' '+aux_param
@@ -82,7 +89,10 @@ def cleanReads(direct,param,outName,flags):
                 cmd='rapifilt -fastq '+inputFile+' -o '+outputFile+' -tb '+tb+' -te '+te+' -l '+lq+' -r '+rq+' -m '+m+' -w '+w+' '+aux_param
                 print cmd
                 os.system(cmd)  
-                
+        
+            cmd='fastqc '+directory+'/'+outName.clean+'.fastq'+' -o '+directory+'/'
+            print cmd
+            os.system(cmd) 
         elif typeReads=='fasta':
             #symbolic link to the original file
             os.symlink(inputFile,outputFile+'.fasta')
@@ -112,5 +122,3 @@ def cleanReads(direct,param,outName,flags):
         print "***********************************"
         print "PASS: NO Quality filter stage      "
         print "***********************************"
-
- 
