@@ -2,15 +2,24 @@
 import os,argparse
 import glob
 import time   
-        
+import re        
+
 def joinHtml():
     text='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"\n'
     text+='<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">\n'
     text+='<head>\n\t<meta charset="utf-8"/>\n</head>\n'
     text+='<body>\n'
     text+='<section>\n\t'
+    text+='<h1>Reads report</h1>\n\t'
+    text+='<img src="clean/clean_reads_fastqc/Images/per_base_quality.png" alt="Reads Quality">\n'
+    text+='<a href="clean/clean_reads_fastqc/fastqc_report.html">FastQC report</a>\n'
+    text+='</section>\n'
+    text+='<section>\n\t'
     text+='<h1>Bins report</h1>\n\t'
     text+='<iframe src="report.html" width="100%" frameborder="0" height="20%" ></iframe>\n'
+    text+='</section>\n'
+    text+='<h1>Assembly report</h1>\n\t'
+    text+='<iframe src="checkm_out/resumenCheckM.html" width="100%" frameborder="0" height="20%" ></iframe>\n'
     text+='</section>\n'
     text+='</section>\n'
     text+='<h1>Blastn report</h1>\n\t'
@@ -53,7 +62,9 @@ def tablaReport(section):
     if (section=='header'):
         text="<!DOCTYPE html>\n<html>\n<head>\n<style>\ntable, th, td {\n\t border: 1px solid black;\n\tborder-collapse: collapse;\n}\n</style>\n</head>\n<body>\n"
     elif (section=='title'):
-        text="<table style='width:70%'>\n<tr>\n\t<th>Bin</th>\n\t<th>Size(reads)</th>\n\t<th>bp</th>\n\t<th>Contigs</th>\n\t<th>Genome</th>\n\t<th>ORFS</th>\n\t<th>bp</th>\n</tr>\n"
+        text="<table style='width:70%'>\n<tr>\n\t<th>Bin</th>\n\t<th>Size(reads)</th>\n\t<th>bp</th>\n\t<th>Contigs</th>\n\t<th>Genome</th>\n\t<th>ORFS</th>\n\t<th>bp</th>\n\t<th>Link</th>\n</tr>\n"
+    elif (section=='title2'):
+        text="<table style='width:70%'>\n<tr>\n\t<th>Bin Id</th>\n\t<th>Marker lineage</th>\n\t<th>UID</th>\n\t<th>genomes</th>\n\t<th>markers</th>\n\t<th>marker sets</th>\n\t<th>0</th>\n\t<th>1</th>\n\t<th>2</th>\n\t<th>3</th>\n\t<th>4</th>\n\t<th>5+</th>\n\t<th>Completeness</th>\n\t<th>Contamination</th>\n\t<th>Strain heterogeneity</th>\n</tr>\n"  
     elif(section=='end'):
         text="</table>\n</body>\n</html>\n"
     return text
@@ -96,7 +107,25 @@ def runCheckM (cpus,binDir,checkmDir,checkm_aux):
     cmd='checkm qa '+checkmDir+'lineage.ms '+checkmDir+' > '+checkmDir+'resumenCheckM.txt'
     print cmd
     os.system(cmd)
-            
+    
+def makeCheckM_report(CheckM_resumen,CheckM_html):
+    file = open(CheckM_html, 'w')
+    file.write(tablaReport('header'))
+    file.write(tablaReport('title2'))
+    rows = open(CheckM_resumen, "r")
+    for line in rows:
+        words=line.split("\n") 
+        words=words[0] 
+        print words
+        if 'round' in words:
+            colums=words.split()#re.split(r'\s+',words)
+            file.write('<tr>\n')
+            for items in colums:
+                file.write('\t<th>'+items+'</th>\n')
+            file.write('<tr>\n')
+    file.write(tablaReport('end'))
+    file.close()
+    
 class parameters:
     manual = 'save the basic inputs'
     totalStages=8
@@ -181,6 +210,16 @@ if __name__ == "__main__":
             orfs,bases=makeReport('fasta',files)
             text=orfs+","+bases
             my_dict[suffix]+=text;
+            
+        pathDataset=directory+'/bins/*html'
+        print pathDataset
+        finalBins=glob.glob(pathDataset)
+        for files in finalBins:
+            suffix=files.split('_contigs_qual')
+            suffix=suffix[0].split('/')
+            suffix=suffix[-1]
+            my_dict[suffix]+=',<a href="'+files+'">fullLink</a>';
+        #<th><a href="html_images.asp">fullLink</a></th>
         
         #16S report
         suffix='all_16S'
@@ -190,7 +229,7 @@ if __name__ == "__main__":
         text=bins+","+bases
         my_dict[suffix]=text;
         
-        text=",NA,NA,NA,NA"
+        text=",NA,NA,NA,NA,NA"
         my_dict[suffix]+=text;
         
         
@@ -217,7 +256,15 @@ if __name__ == "__main__":
         #file = open(reportFile, 'a')
         file.write(tablaReport('end'))
         file.close()
+        ##END FINAL BINS report
+
+        ##CheckM report   
+        CheckM_resumen=directory+'/checkm_out/resumenCheckM.txt'
+        CheckM_html=directory+'/checkm_out/resumenCheckM.html'
+        makeCheckM_report(CheckM_resumen,CheckM_html)  
         
+        
+        ##Taxonomical report
         pathDataset=directory+'/bins/*blastFile.tab'
         #print pathDataset
         finalBins=glob.glob(pathDataset)
