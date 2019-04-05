@@ -50,7 +50,7 @@ def cleanReads(direct,param,outName,flags):
                 print cmd
                 os.system(cmd) 
             elif(cleanTool=='trimmomatic'):
-                cmd='java -jar '+trimmomatic_path+'trimmomatic'+' PE -phred33 -threads '+cpus+' '+files[0]+' '+files[1]+' '+outputFile+'.'+param.typeReads+' LEADING:'+lq+' TRAILING:'+rq+'  MINLEN:'+m+' '+aux_param
+                cmd='java -jar '+trimmomatic_path+'trimmomatic'+' PE -phred33 -threads '+cpus+' '+files[0]+' '+files[1]+' '+outputFile+'_1.'+param.typeReads+' '+outputFile+'_1u.'+param.typeReads+' '+outputFile+'_2.'+param.typeReads+' '+outputFile+'_2uP.'+param.typeReads+' '+' LEADING:'+lq+' TRAILING:'+rq+'  MINLEN:'+m+' '+aux_param
                 print cmd
                 os.system(cmd) 
             elif(cleanTool=='fastx'): #Fastx: NO pair end ouput, no left cut, no windows otion Q33 format
