@@ -11,6 +11,7 @@
 #GENERAL PARAMETERS
 #################################################################################
 -start_in 1
+#-end_in 3
 -inputFile <intallPath>/DATMA/examples/bmini/Bancomini.fastq
 -outputDir <intallPath>/DATMA/examples/bmini/bmini_out
 -cpus 8
@@ -18,22 +19,23 @@
 #################################################################################
 #Quality Control Configuration
 #################################################################################
-#-cleanTool rapifilt
+-cleanTool trimmomatic
 -lq 35
 -rq 35
 -m  60
 -wq: 2
+-trimmomatic_path <intallPath>/DATMA//tools/Trimmomatic-0.38/
 #################################################################################
 #Merge illunima files using FLASH tool
 #################################################################################
 #fb: Number of bases for set a merge (default 0)
-#
+#-fb 5
 #################################################################################
 #16S-REMOVE
 #################################################################################
--database_16s_fasta '<intallPath>/DATMA/16sDatabases/ncbi/16SMicrobial.fasta'
--database_16s_fm9 '<intallPath>/DATMA/16sDatabases/ncbi/ncbi.fm9'
--RDP_path '<intallPath>/DATMA/tools/RDPTools'
+-database_16s_fasta <intallPath>/DATMA/16sDatabase/rfam/RFAM_db.fasta
+-database_16s_fm9 <intallPath>/DATMA/16sDatabase/rfam/RFAM_db.fm9
+-RDP_path <intallPath>/DATMA/tools/RDPTools/
 #################################################################################
 #CLAME
 #################################################################################
@@ -43,15 +45,23 @@
 #################################################################################
 #ASSEMBLY OPTIONS
 #################################################################################
--assembly velvet
+-assembly spades
+-asm_aux --only-assembler
+#################################################################################
+#ASSEMBLY QUALITY WITH QUAST TOOL OPTIONS
+#################################################################################
+#ref_name="PATH to ref used to asses the bin completeness"
+#-use_ref 
+#-ORF_aux -p meta
+#
 #################################################################################
 #BLAST
 #################################################################################
--database_nt ~/DATMA/blastdb/nt
+-database_nt  <intallPath>/DATMA/db/NT/NT_May_2017/nt
 #################################################################################
 #Kaiju
 #################################################################################
-#database_kaiju ~/DATMA/tools/kaiju/kaijudb
+-database_kaiju <intallPath>/DATMA/tools/kaiju-master/kaijudb
 #################################################################################
 #Krona
 #################################################################################
