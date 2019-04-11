@@ -50,12 +50,23 @@ if __name__ == "__main__":
         builDirectory(direct,param,flags)
         
         #1.Clean de reads 
+        if(param.endWorkflow==1):
+            print "End in Quality control"
+            exit(10)
         cleanReads(direct,param,outName,flags)
+            
         
         #2.Remove 16S sequences
+        if(param.endWorkflow==2):
+            print "End in 16S ribosomal"
+            exit(10)
         seq_16Sremoval(direct,param,outName,flags)
         
         #CLAME rounds
+        if(param.endWorkflow==3):
+            print "End in Binning stage"
+            exit(10)
+        
         i=0
         dirBase=direct.rounds
         bases=param.bases.split(',')
@@ -87,6 +98,9 @@ if __name__ == "__main__":
            
             
         #4. Assemble and Annotate each bin by separated
+        if(param.endWorkflow==4):
+            print "End in assembly stage"
+            exit(10)
         direct.rounds=dirBase
         directory=direct.globalOutput+'/'+direct.rounds
         pathDataset = directory+'*/'+outputNames.clame+'_*.fast*'  
@@ -96,11 +110,14 @@ if __name__ == "__main__":
         print bins
         binNum=0
         
+        if(param.endWorkflow==5):
+            print "End in annotation stage"
+            exit(10)
         binDir=direct.globalOutput+'/bins/'
         cmd="mkdir "+binDir
         print cmd
         os.system(cmd)
-            
+        
         for binName in bins: #for each bin generated
             
             suffix=binName.split('.')
@@ -136,4 +153,4 @@ if __name__ == "__main__":
     else:
         print description
         print epilog
-        
+      
