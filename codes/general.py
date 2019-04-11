@@ -1,3 +1,4 @@
+
 #!/usr/bin/python
 import os,sys,subprocess
 
@@ -8,6 +9,7 @@ class parameters:
     manual = 'save the basic inputs'
     totalStages=8
     startStage=1 
+    endWorkflow=100
     inputFile= ''
     outputFile='output'
     cpus=1
@@ -128,6 +130,8 @@ def readConfigFile(fileName, param):
         if line.startswith('-start_in'):
             initial_stage=int(words[1])
             param.startStage=initial_stage
+        elif line.startswith('-end_in'):
+            param.endWorkflow=int(words[1])
         elif line.startswith('-inputFile'): #mandatory!!!
             error=False
             inputFile=words[1]
@@ -243,7 +247,7 @@ def pipelineFlow(param,stageFlags):
     totalStages=param.totalStages
     
     if startStage<totalStages:
-        if startStage==1:
+        if startStage==1:                   #full
             stageFlags.builddir=True
             stageFlags.quality=True
             stageFlags.seq_16sSeqs=True
@@ -251,25 +255,25 @@ def pipelineFlow(param,stageFlags):
             stageFlags.assemble=True            
             stageFlags.blastn=True            
             stageFlags.prodigal=True 
-        elif startStage==2:
+        elif startStage==2:                 #from 16s stage
             stageFlags.seq_16sSeqs=True
             stageFlags.clame=True
             stageFlags.assemble=True  
             stageFlags.blastn=True            
             stageFlags.prodigal=True 
-        elif startStage==3:   
+        elif startStage==3:                 #from binning stage   
             stageFlags.clame=True
             stageFlags.assemble=True  
             stageFlags.blastn=True            
             stageFlags.prodigal=True 
-        elif startStage==4:    
+        elif startStage==4:                 #from assemble    
             stageFlags.assemble=True  
             stageFlags.blastn=True            
             stageFlags.prodigal=True
-        elif startStage==5:    
+        elif startStage==5:                 #from blast
             stageFlags.blastn=True            
             stageFlags.prodigal=True
-        elif startStage==6:
+        elif startStage==6:                 #from prodigal
             stageFlags.prodigal=True
         
         print 'STAGES: ',
