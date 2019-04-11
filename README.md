@@ -11,7 +11,7 @@ Installing DATMA
 NON distributed version (NON COMPSs support)<br/>
 1. Clone the DATMA directory:<br/> 
 git clone https://github.com/andvides/DATMA.git
-2. Run the ./install_datma.sh script:<br/>
+2. Run the ./install_datma_UBUNTU.sh script:<br/>
 bash install_datma.sh 
 3. Export the PATH:<br/> 
 export PATH=<install_path>/DATMA/tools/bin/:$PATH
@@ -20,7 +20,7 @@ Distributed version (COMPSs support)<br/>
 1. Intall COMPSs framework (see the COMPSs manual)
 2. Clone the DATMA directory:<br/> 
 git clone https://github.com/andvides/DATMA.git
-3. Run the ./install_datma.sh script:<br/>
+3. Run the ./install_datma_UBUNTU.sh script:<br/>
 bash install_datma.sh 
 4. Export the PATH:<br/>
 export PATH=<install_path>/DATMA/tools/bin/:$PATH
