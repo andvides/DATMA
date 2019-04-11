@@ -82,6 +82,8 @@ def readConfigFile(fileName, param):
             error=False
             inputFile=words[1]
             param.inputFile=inputFile
+        elif line.startswith('-end_in'):
+            param.endWorkflow=int(words[1])
         elif line.startswith('-outputDir'):
             directory=words[1]
             param.outputFile=directory
@@ -128,6 +130,7 @@ def makeCheckM_report(CheckM_resumen,CheckM_html):
     
 class parameters:
     manual = 'save the basic inputs'
+    endWorkflow=100
     totalStages=8
     inputFile= ''
     outputFile='output'
@@ -150,6 +153,10 @@ if __name__ == "__main__":
     
     if args.file :
         readConfigFile(args.file,param)    
+        if(param.endWorkflow!=100):
+            print "Not file report generated"
+            exit(10)
+            
         directory=param.outputFile
         checkm_aux=str(param.checkm_aux)
         
@@ -301,3 +308,4 @@ if __name__ == "__main__":
         file = open(resumenFile, 'w')
         file.write(joinHtml())
         file.close()
+
