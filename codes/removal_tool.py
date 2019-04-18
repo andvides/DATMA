@@ -16,6 +16,7 @@ def seq_16Sremoval(direct,param,outName,flags):
     typeReads=param.typeReads
     assemblyTool=param.assembly
     RDP_path=param.RDP_path
+    useBWA=param.useBWA
 
     if flags.seq_16sSeqs:
         #make directory to save the results
@@ -34,51 +35,49 @@ def seq_16Sremoval(direct,param,outName,flags):
             sys.exit(0)
             
         #Mapping the clean reads against the 16S_database
-        cmd='bwa mem -t '+cpus+' '+database_fasta+' '+inputFile+"."+typeReads+' > temp_BWA.sam'+' '+aux_16s
-        print cmd
-        os.system(cmd)
+        if useBWA:
+            cmd='bwa mem -t '+cpus+' '+database_fasta+' '+inputFile+"."+typeReads+' > temp_BWA.sam'+' '+aux_16s
+            print cmd
+            os.system(cmd)
         
-        cmd='samtools view -S -F4 temp_BWA.sam > temp_BWA.map'
-        print cmd
-        os.system(cmd)
+            cmd='samtools view -S -F4 temp_BWA.sam > temp_BWA.map'
+            print cmd
+            os.system(cmd)
 
-        cmd="awk '{print $1}' temp_BWA.map > "+outFile+'.list'
-        print cmd
-        os.system(cmd)
+            cmd="awk '{print $1}' temp_BWA.map > "+outFile+'.list'
+            print cmd
+            os.system(cmd)
 
-        cmd='rm temp_BWA*'
-        print cmd
-        os.system(cmd)
-
-        """
-        #Mapping the clean reads against the 16S_database
-        mapping2FM9(cpus,inputFile+"."+typeReads,outFile+"_1",typeReads,database_fm9,'-print')
-        cmd= "awk '{print $1}' "+outFile+"_1.links | awk -F '"+firstC+"' '{print $2}' > "+outFile+'_1.list'
-        print cmd
-        os.system(cmd)   
+            cmd='rm temp_BWA*'
+            print cmd
+            os.system(cmd)
+        else:
+            mapping2FM9(cpus,inputFile+"."+typeReads,outFile+"_1",typeReads,database_fm9,'-print')
+            cmd= "awk '{print $1}' "+outFile+"_1.links | awk -F '"+firstC+"' '{print $2}' > "+outFile+'_1.list'
+            print cmd
+            os.system(cmd)   
         
-        #Mapping the 16S_database againt the clean reads
-        #Generate the FM9 from the clean reads
-        genFM9(cpus,inputFile+"."+typeReads,inputFile,typeReads)
-        cleanFM9=inputFile+".fm9"
-        mapping2FM9(cpus,database_fasta,outFile+"_2",'fasta',cleanFM9,'-print')
-        decoseq(firstC,inputFile+'.index',outFile+"_2.result",outFile+"_2.list")
+            #Generate the FM9 from the clean reads
+            genFM9(cpus,inputFile+"."+typeReads,inputFile,typeReads)
+            cleanFM9=inputFile+".fm9"
+            mapping2FM9(cpus,database_fasta,outFile+"_2",'fasta',cleanFM9,'-print')
+            decoseq(firstC,inputFile+'.index',outFile+"_2.result",outFile+"_2.list")
 
-        #concatenate 16s sequences found
-        cmd="cat "+outFile+"_1.list "+outFile+"_2.list | sed '/^\s*$/d' > "+outFile+".list"
-        print cmd
-        os.system(cmd)
-        #cmd="cat "+outFile+"_1.list | sed '/^\s*$/d' > "+outFile+".list"
+            #concatenate 16s sequences found
+            cmd="cat "+outFile+"_1.list "+outFile+"_2.list | sed '/^\s*$/d' > "+outFile+".list"
+            print cmd
+            os.system(cmd)
+            #cmd="cat "+outFile+"_1.list | sed '/^\s*$/d' > "+outFile+".list"
 
-        #remove temp files
-        cmd="rm "+outFile+"_*.*"
-        print cmd
-        os.system(cmd) 
+            #remove temp files
+            cmd="rm "+outFile+"_*.*"
+            print cmd
+            os.system(cmd) 
         
-        cmd="rm "+cleanFM9
-        print cmd
-        os.system(cmd) 
-        """
+            cmd="rm "+cleanFM9
+            print cmd
+            os.system(cmd) 
+        
         
         #Recovery the sequences names
         recoverySeq(outFile+".list",inputFile+"."+typeReads,outFile,typeReads,"-fasta_sel")    
