@@ -15,12 +15,5 @@ make
 cp selectFasta ../bin/
 cd ..
 
-#install RAPIFILT
-echo 'Installing RAPIFILT'
-cd rapifilt
-make
-cp rapifilt ../bin/
-cd ..
-
 
 
