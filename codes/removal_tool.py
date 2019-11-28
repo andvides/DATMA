@@ -17,6 +17,7 @@ def seq_16Sremoval(direct,param,outName,flags):
     assemblyTool=param.assembly
     RDP_path=param.RDP_path
     useBWA=param.useBWA
+    clame_aux=param.clame_aux
 
     if flags.seq_16sSeqs:
         #make directory to save the results
@@ -36,23 +37,25 @@ def seq_16Sremoval(direct,param,outName,flags):
             
         #Mapping the clean reads against the 16S_database
         if useBWA:
-            cmd='bwa mem -t '+cpus+' '+database_fasta+' '+inputFile+"."+typeReads+' > temp_BWA.sam'+' '+aux_16s
+            temp_BWA=directory+'/'+direct.removal+'/temp_BWA'
+            cmd='bwa mem -t '+cpus+' '+database_fasta+' '+inputFile+"."+typeReads+' > '+temp_BWA+'.sam'+' '+aux_16s
             print cmd
             os.system(cmd)
         
-            cmd='samtools view -S -F4 temp_BWA.sam > temp_BWA.map'
+            cmd='samtools view -S -F4 '+' '+temp_BWA+'.sam > '+temp_BWA+'.map'
             print cmd
             os.system(cmd)
 
-            cmd="awk '{print $1}' temp_BWA.map > "+outFile+'.list'
+            cmd="awk '{print $1}' "+temp_BWA+".map > "+outFile+'.list'
             print cmd
             os.system(cmd)
 
-            cmd='rm temp_BWA*'
+            cmd='rm '+temp_BWA+'*'
             print cmd
             os.system(cmd)
         else:
-            mapping2FM9(cpus,inputFile+"."+typeReads,outFile+"_1",typeReads,database_fm9,'-print')
+            list2Exclude=""
+            mapping2FM9(cpus,20,inputFile+"."+typeReads,outFile+"_1",typeReads,database_fm9,'-print',list2Exclude,clame_aux)
             cmd= "awk '{print $1}' "+outFile+"_1.links | awk -F '"+firstC+"' '{print $2}' > "+outFile+'_1.list'
             print cmd
             os.system(cmd)   
@@ -60,7 +63,7 @@ def seq_16Sremoval(direct,param,outName,flags):
             #Generate the FM9 from the clean reads
             genFM9(cpus,inputFile+"."+typeReads,inputFile,typeReads)
             cleanFM9=inputFile+".fm9"
-            mapping2FM9(cpus,database_fasta,outFile+"_2",'fasta',cleanFM9,'-print')
+            mapping2FM9(cpus,20,database_fasta,outFile+"_2",'fasta',cleanFM9,'-print',list2Exclude,clame_aux)
             decoseq(firstC,inputFile+'.index',outFile+"_2.result",outFile+"_2.list")
 
             #concatenate 16s sequences found
@@ -146,3 +149,4 @@ def decoseq(firstC,index,result,outFile):
             fsrc2.write(name+'\n')
     fsrc2.close()
     fsrc3.close()
+

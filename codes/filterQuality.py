@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import os,sys
-from merge_tool import merge
+from merge_tool import *
 
 def cleanReads(direct,param,outName,flags):
     #Input-ouput names
@@ -50,7 +50,7 @@ def cleanReads(direct,param,outName,flags):
                 print cmd
                 os.system(cmd) 
             elif(cleanTool=='trimmomatic'):
-                cmd='java -jar '+trimmomatic_path+'trimmomatic'+' PE -phred33 -threads '+cpus+' '+files[0]+' '+files[1]+' '+outputFile+'_1.'+param.typeReads+' '+outputFile+'_1u.'+param.typeReads+' '+outputFile+'_2.'+param.typeReads+' '+outputFile+'_2uP.'+param.typeReads+' '+' LEADING:'+lq+' TRAILING:'+rq+'  MINLEN:'+m+' '+aux_param
+                cmd='java -jar '+trimmomatic_path+'trimmomatic'+' PE -phred33 -threads '+cpus+' '+files[0]+' '+files[1]+' '+outputFile+'.'+param.typeReads+' LEADING:'+lq+' TRAILING:'+rq+'  MINLEN:'+m+' '+aux_param
                 print cmd
                 os.system(cmd) 
             elif(cleanTool=='fastx'): #Fastx: NO pair end ouput, no left cut, no windows otion Q33 format
@@ -96,7 +96,7 @@ def cleanReads(direct,param,outName,flags):
         elif typeReads=='fasta':
             #symbolic link to the original file
             os.symlink(inputFile,outputFile+'.fasta')
-	    print 'NO quality file type'
+            print 'NO quality file type'
         else:
             print 'Quality Filter stage:ERROR IN THE CONFIGURATION FILE'
             print "Unknown reads' format"
@@ -112,6 +112,18 @@ def cleanReads(direct,param,outName,flags):
                 print 'Quality Filter stage:ERROR IN THE CONFIGURATION FILE'
                 print "Filter stage madatory for this format" 
                 sys.exit(10)
+            elif typeReads=='illumina':
+                files=inputFile.split(',')
+                param.typeReads='fastq'    #update the format for the next stages
+                outputFile=directory+'/'+outName.clean+'.fastq'
+                if not (os.path.exists(outputFile)):
+                    #merge files
+                    temName='mergeReads'
+                    mergeGeneric(param,files[0],files[1],temName,directory)
+                    #rename the temp files to the regular names
+                    cmd='mv '+directory+'/'+temName+'.extendedFrags.fastq '+outputFile
+                    print cmd
+                    os.system(cmd)
             else:
                 #make directory to save the results
                 cmd="mkdir "+directory
@@ -119,6 +131,7 @@ def cleanReads(direct,param,outName,flags):
                 os.system(cmd)
                 #symbolic link to the original file
                 os.symlink(inputFile,outputFile)
+        
         print "***********************************"
         print "PASS: NO Quality filter stage      "
         print "***********************************"

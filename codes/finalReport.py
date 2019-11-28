@@ -62,7 +62,7 @@ def tablaReport(section):
     if (section=='header'):
         text="<!DOCTYPE html>\n<html>\n<head>\n<style>\ntable, th, td {\n\t border: 1px solid black;\n\tborder-collapse: collapse;\n}\n</style>\n</head>\n<body>\n"
     elif (section=='title'):
-        text="<table style='width:70%'>\n<tr>\n\t<th>Bin</th>\n\t<th>Size(reads)</th>\n\t<th>bp</th>\n\t<th>Contigs</th>\n\t<th>Genome</th>\n\t<th>ORFS</th>\n\t<th>bp</th>\n\t<th>Link</th>\n</tr>\n"
+        text="<table style='width:70%'>\n<tr>\n\t<th>Bin</th>\n\t<th>Size(reads)</th>\n\t<th>bp</th>\n\t<th>Contigs</th>\n\t<th>Genome</th>\n\t<th>ORFS</th>\n\t<th>bp</th>\n\t<th>BUSCO</th>\n\t<th>Link</th>\n</tr>\n"
     elif (section=='title2'):
         text="<table style='width:70%'>\n<tr>\n\t<th>Bin Id</th>\n\t<th>Marker lineage</th>\n\t<th>UID</th>\n\t<th>genomes</th>\n\t<th>markers</th>\n\t<th>marker sets</th>\n\t<th>0</th>\n\t<th>1</th>\n\t<th>2</th>\n\t<th>3</th>\n\t<th>4</th>\n\t<th>5+</th>\n\t<th>Completeness</th>\n\t<th>Contamination</th>\n\t<th>Strain heterogeneity</th>\n</tr>\n"  
     elif(section=='end'):
@@ -100,7 +100,15 @@ def readConfigFile(fileName, param):
             param.combine='-c' 
         elif line.startswith('-checkm_aux'): 
             param.checkm_aux=words[1]            
-
+        elif line.startswith('-lineage'): 
+            param.lineage=words[1]    
+#BUSCO
+def runBusco(cpus,inputName,outputName,lineage,tmp):
+    cmd='busco -c '+cpus+' -f -m genome -i '+inputName+' -o '+outputName+' -l '+lineage+' -t '+tmp 
+    print cmd
+    os.system(cmd) 
+    print "PASS BUSCO DONE"    
+     
 def runCheckM (cpus,binDir,checkmDir,checkm_aux):
     cmd='checkm lineage_wf -t '+str(cpus)+' '+binDir+' '+checkmDir+' '+checkm_aux
     print cmd
@@ -138,7 +146,8 @@ class parameters:
     typeReads='sff'      
     combine=' '
     checkm_aux=''
-
+    lineage=''
+    
 if __name__ == "__main__":
     #Final report
     description='DATMA: Distributed AuTomatic Metagenomc Assembly and Annotation framework report script \n'
@@ -165,7 +174,37 @@ if __name__ == "__main__":
         checkmDir=directory+'/checkm_out/'
         runCheckM (param.cpus,binDir,checkmDir,checkm_aux)
 
+        #BUSCO
+        buscoDir=directory+'/busco/'
+        cmd='rm -r '+buscoDir+'/*'
+        print cmd
+        os.system(cmd) 
         
+        my_dict2 = {}
+        cmd='mkdir -p '+buscoDir
+        print cmd
+        os.system(cmd) 
+        
+        os.chdir(buscoDir)
+        
+        for files in glob.glob(binDir+'*contigs.fna'):
+            suffix=files.split('_contigs')
+            suffix=suffix[0].split('/')
+            suffix=suffix[-1]
+            outputName=buscoDir
+            runBusco(param.cpus,files,suffix,param.lineage,buscoDir)
+            cmd='mv -f run_'+suffix+' '+outputName
+            print cmd
+            os.system(cmd) 
+            
+            fileName=outputName+'run_'+suffix+'/short_summary_'+suffix+'.txt'
+            with open(fileName) as fp:
+                for line in fp:
+                    if 'C:' in line:
+                        line=line.replace(",", ";")
+                        my_dict2[suffix]=line[1:-1];
+        print my_dict2
+
         #Run Krona
         combine=param.combine
         reportFile= directory+'/report.html'
@@ -189,11 +228,13 @@ if __name__ == "__main__":
         for files in finalBins:
             suffix=files.split('.')
             suffix=suffix[0].split('/')
-            suffix=suffix[-2]+'_'+suffix[-1]
+            temp=suffix[-1].split('_')
+            temp=temp[0]+'_'+temp[1]    
+            suffix=suffix[-2]+'_'+temp
             bins,bases=makeReport(typeReads,files)
             text=bins+","+bases+','
-            my_dict[suffix]=text;
             #print suffix,':',text
+            my_dict[suffix]=text;
 
         pathDataset=directory+'/bins/*contigs.fna'
         #print pathDataset
@@ -204,11 +245,12 @@ if __name__ == "__main__":
             suffix=suffix[-1]
             contigs,genome=makeReport('fasta',files)
             text=contigs+","+genome+','
-            my_dict[suffix]+=text;
             #print suffix,'->',text
+            my_dict[suffix]+=text;
+            
             
         pathDataset=directory+'/bins/*orfsFile.faa'
-        print pathDataset
+        #print pathDataset
         finalBins=glob.glob(pathDataset)
         for files in finalBins:
             suffix=files.split('_orfsFile')
@@ -217,7 +259,18 @@ if __name__ == "__main__":
             orfs,bases=makeReport('fasta',files)
             text=orfs+","+bases
             my_dict[suffix]+=text;
-            
+        
+        ##BUSCO
+        pathDataset=directory+'/bins/*contigs.fna'
+        #print pathDataset
+        finalBins=glob.glob(pathDataset)
+        for files in finalBins:
+            suffix=files.split('_contigs')
+            suffix=suffix[0].split('/')
+            suffix=suffix[-1]
+            my_dict[suffix]+=','+my_dict2[suffix];
+            print my_dict2[suffix]
+        
         pathDataset=directory+'/bins/*html'
         print pathDataset
         finalBins=glob.glob(pathDataset)
@@ -236,7 +289,7 @@ if __name__ == "__main__":
         text=bins+","+bases
         my_dict[suffix]=text;
         
-        text=",NA,NA,NA,NA,NA"
+        text=",NA,NA,NA,NA,NA,NA"
         my_dict[suffix]+=text;
         
         
@@ -281,7 +334,7 @@ if __name__ == "__main__":
             finalTaxo+=taxos+' '
         #print finalTaxo
         
-        cmd= 'ktImportBLAST '+finalTaxo+' -o '+directory+'/binsBlastn.html '+combine
+        cmd='ktImportBLAST '+finalTaxo+' -o '+directory+'/binsBlastn.html '+combine
         print cmd
         os.system(cmd)
 
@@ -294,7 +347,7 @@ if __name__ == "__main__":
             finalTaxo+=taxos+' '
         #print finalTaxo
 
-        cmd= 'ktImportText '+finalTaxo+' -o '+directory+'/binsKaiju.html '+combine
+        cmd='ktImportText '+finalTaxo+' -o '+directory+'/binsKaiju.html '+combine
         print cmd
         os.system(cmd)
         
@@ -308,4 +361,5 @@ if __name__ == "__main__":
         file = open(resumenFile, 'w')
         file.write(joinHtml())
         file.close()
+
 

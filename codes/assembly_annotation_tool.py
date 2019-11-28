@@ -73,14 +73,20 @@ def assembly_annotation(suffix,prefix,binName,contigsFile,contigsFile_stat,orfsF
     
 # assembler
 def assembly(cpus,assemblyTool,typeReads,inputName,outputName,asm_aux):
-    if (assemblyTool == 'megahit'):	
+    if (assemblyTool == 'megahit'):
         assemblyOut='final.contigs.fa'
-        cmd='megahit -r '+inputName+' -o '+outputName+' -t '+cpus+' '+asm_aux
+        if typeReads=='illumina':
+            cmd='megahit -1 '+inputName+'_1.fastq -2 '+inputName+'_2.fastq  -m 0.5 -t 12 -o '+outputName+' -t '+cpus+' '+asm_aux
+        else:    
+            cmd='megahit -r '+inputName+' -o '+outputName+' -t '+cpus+' '+asm_aux
         print cmd
         os.system(cmd)
     elif (assemblyTool == 'velvet'):
         assemblyOut='contigs.fa'
-        cmd='velveth '+outputName+' 31 -'+typeReads+' -short '+inputName+' '+asm_aux
+        if typeReads=='illumina':
+            cmd='velveth '+outputName+' 31 -fastq -shortPaired -separate '+inputName+'_1.fastq '+inputName+'_2.fastq '+asm_aux
+        else:
+            cmd='velveth '+outputName+' 31 -'+typeReads+' -short '+inputName+' '+asm_aux
         print cmd
         os.system(cmd)
         cmd='velvetg '+outputName+' -exp_cov auto -ins_length 260'+' '+asm_aux
@@ -93,14 +99,21 @@ def assembly(cpus,assemblyTool,typeReads,inputName,outputName,asm_aux):
     	os.system(cmd) 
     elif (assemblyTool == 'spades'):
         assemblyOut='contigs.fasta'
+        if typeReads=='illumina':
+            cmd='spades.py  -t '+cpus+' -o '+outputName+' -1 '+inputName+'_1.fastq -2 '+inputName+'_2.fastq '+asm_aux
+        else:
+            cmd='spades.py  -t '+cpus+' -o '+outputName+' -s '+inputName+'.typeReads '+asm_aux
+        print cmd
+        os.system(cmd)
+        """
         cmd='cp '+inputName+' '+outputName+'_temp.'+typeReads
         print cmd
         os.system(cmd)
-
         #cmd='spades.py --only-assembler -t '+cpus+' -o '+outputName+' -s '+outputName+'_temp.'+typeReads
         cmd='spades.py  -t '+cpus+' -o '+outputName+' -s '+outputName+'_temp.'+typeReads+' '+asm_aux
         print cmd
         os.system(cmd)
+        """
     else:
         print "Error assembly no assigned"
         sys.exit(0)
@@ -174,3 +187,5 @@ def makeReport(typeReads,inputName):
     else:
         return str('Error'),str(inputName)
     
+
+

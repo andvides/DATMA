@@ -1,4 +1,3 @@
-
 #!/usr/bin/python
 import os,sys,subprocess
 
@@ -29,6 +28,7 @@ class parameters:
     #Flash
     fb=5
     flash_aux=" "
+    forceMerge=False
     
     #16S-remove
     database_16s_fasta='~/DATMA/16sDatabases/ncbi/16SMicrobial.fasta'
@@ -45,9 +45,11 @@ class parameters:
     nu=3 
     w=0
     clame_aux=" "
+    fm9="unassigned"
+    block=1
     
     #Assembly options
-    assembly='spades'	    
+    assembly='spades'       
     assemblyOut='contigs.fa'    
     asm_aux=" "
     ORF_aux=" "
@@ -175,8 +177,10 @@ def readConfigFile(fileName, param):
         elif line.startswith('-fb'):
             param.fb=int(words[1]) 
         elif line.startswith('-flash_aux'):
-            param.flash_aux=" ".join(str(x) for x in words[1:])           
-        
+            param.flash_aux=" ".join(str(x) for x in words[1:])
+        elif line.startswith('-forceMerge'):
+            param.forceMerge=True
+            
         #16S parameters
         elif line.startswith('-useBWA'):
             param.useBWA=True
@@ -199,8 +203,12 @@ def readConfigFile(fileName, param):
             param.ld=int(words[1])
         elif line.startswith('-window'):
             param.w=int(words[1])
+        elif line.startswith('-fm9'):
+            param.fm9=words[1]
         elif line.startswith('-nu'):
             param.nu=float(words[1])
+        elif line.startswith('-block'):
+            param.block=int(words[1])
         elif line.startswith('-clame_aux'):
             param.clame_aux=" ".join(str(x) for x in words[1:])
             
@@ -296,9 +304,11 @@ def builDirectory(direct,param,flags):
         direct.globalOutput=param.outputFile
         directory=direct.globalOutput
         if(os.path.exists(directory)):
-            print "ERROR IN THE CONFIGURATION FILE"
             print 'Using an existing directory: ',directory 
-            sys.exit(0)   
+            print 'start in: ',startStage,' Building: ',directory,' for: ',inputFile
+            cmd="mkdir -p "+directory
+            print cmd
+            os.system(cmd)   
         else:
             print 'start in: ',startStage,' Building: ',directory,' for: ',inputFile
             cmd="mkdir "+directory
@@ -347,3 +357,32 @@ def joinHtml():
     text+='<iframe src="binsKaiju.html" width="100%" frameborder="0" height="600"></iframe>\n'
     text+="</section>\n</body>\n</html>\n"
     return text
+
+def list2rawReads(binName,param,directory):
+    typeReads=param.typeReads
+    suffix=binName.split('.')
+    ext=suffix[1]
+    outFile=suffix[0]
+    if typeReads=='illumina':
+        input1=directory+"/clean/clean_reads_1.fastq"
+        input2=directory+"/clean/clean_reads_1.fastq"
+        cmd='selectFasta -fasta_sel -list '+binName+' -fastq '+input1+' >'+outFile+'_1.fastq'
+        print cmd
+        os.system(cmd)
+
+        cmd='selectFasta -fasta_sel -list '+binName+' -fastq '+input2+' >'+outFile+'_2.fastq'
+        print cmd
+        os.system(cmd)
+    elif typeReads=='fasta':
+        input1=directory+"/clean/clean_reads.fastq"
+        cmd='selectFasta -fasta_sel -list '+binName+' -fasta '+input1+' >'+outFile+'.fasta'
+        print cmd
+        os.system(cmd) 
+        
+    else:
+        input1=directory+"/clean/clean_reads.fastq"
+        cmd='selectFasta -fasta_sel -list '+binName+' -fastq '+input1+' >'+outFile+'.fastq'
+        print cmd
+        os.system(cmd) 
+
+
