@@ -1,10 +1,8 @@
 #!/bin/bash
-echo $datmaPATH
 pwd=`pwd`
 configFile=$1
 pwd
 cd $datmaPATH
-pwd
-bash runDATMA.sh $configFile seq
+bash $datmaPATH/runDATMA.sh $configFile seq
 cd $pwd
-pwd
+
