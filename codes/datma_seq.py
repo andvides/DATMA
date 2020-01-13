@@ -1,6 +1,10 @@
 #!/usr/bin/python
 #
 #runcompss --summary --master_name=aletoso -d --project=./project.xml --resources=./resources.xml --lang=python --master_port=43100 ./clameWorkFlow.py -f simple.txt
+#DATMA: Distributed AuTomatic Metagenomc Assembly and Annotation framework          #
+#Version 4.0 November 2019                                                          #
+#Authors:                                                                           #
+#Benavides A, Sanchez F, Alzate JF, and Cabarcas F                                  #
 #
 import os,argparse, errno
 import glob
@@ -36,6 +40,7 @@ if __name__ == "__main__":
         outName=outputNames()
         direct=directories()
         flags=stageFlags()
+        
         #Check for all the tools
         is_tool(tool)
     
@@ -43,7 +48,7 @@ if __name__ == "__main__":
         readConfigFile(fileName, param)    
         
         startStage=param.startStage
-	print "startStage",startStage
+        print "startStage",startStage
         if(startStage>4):
             print "END first part"
             exit(10)

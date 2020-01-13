@@ -4,8 +4,8 @@ from shutil import copyfile
 
 from pycompss.api.task import task
 from pycompss.api.parameter import *
-@task(binName=FILE, contigsFile=FILE_OUT, contigsFile_stat=FILE_OUT, orfsFile=FILE_OUT, blastFile=FILE_OUT, kaijuFile=FILE_OUT)
-def assembly_annotation(suffix,prefix,binName,contigsFile,contigsFile_stat,orfsFile,blastFile,database_nt,kaijuFile,database_kaiju,cpus,assembler,use_ref,ref_name,asm_aux,ORF_aux,blast_aux,kaiju_aux,quast_aux):
+@task(forwardFile=FILE, reverseFile=FILE, contigsFile=FILE_OUT, contigsFile_stat=FILE_OUT, orfsFile=FILE_OUT, blastFile=FILE_OUT, kaijuFile=FILE_OUT)
+def assembly_annotation(suffix,prefix,forwardFile,reverseFile,contigsFile,contigsFile_stat,orfsFile,blastFile,database_nt,kaijuFile,database_kaiju,cpus,assembler,use_ref,ref_name,asm_aux,ORF_aux,blast_aux,kaiju_aux,quast_aux):
     
     """++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"""
     #Edit these lines if the database_nt and database_kaiju directories are different in the workerers
@@ -16,16 +16,33 @@ def assembly_annotation(suffix,prefix,binName,contigsFile,contigsFile_stat,orfsF
     
     #Make temp directory 
     directory= '~/DATMA_run_'+suffix
-    cmd='mkdir '+directory
+    cmd='mkdir -p '+directory
     print cmd
     os.system(cmd) 
 
     typeReads=prefix
+    ext='fasta'
+    if typeReads=='illumina':
+        ext='fastq'
+    elif typeReads=='fastq':
+        ext='fastq'
 
     #Assembly process
-    inputFile=binName
+    forwardFile2=forwardFile.split('.')
+    forwardFile2=forwardFile2[0]+'.'+ext
+    
+    reverseFile2=reverseFile.split('.')
+    reverseFile2=reverseFile2[0]+'.'+ext
+    
+    cmd='cp '+forwardFile+' '+forwardFile2
+    os.system(cmd) 
+    
+    cmd='cp '+reverseFile+' '+reverseFile2
+    os.system(cmd) 
+    
+    
     outputFile=directory+'/contigs'
-    assemblyOut=assembly(cpus,assembler,typeReads,inputFile,outputFile,asm_aux)
+    assemblyOut=assembly(cpus,assembler,typeReads,forwardFile2,reverseFile2,outputFile,asm_aux)
     
     cmd='cat '+outputFile+'/'+assemblyOut+' > '+contigsFile
     os.system(cmd) 
@@ -69,40 +86,40 @@ def assembly_annotation(suffix,prefix,binName,contigsFile,contigsFile_stat,orfsF
     #remove temp directory 
     directory= '~/DATMA_run_'+suffix
     cmd='rm -r '+directory
-    os.system(cmd) 
+    #os.system(cmd) 
     
 # assembler
-def assembly(cpus,assemblyTool,typeReads,inputName,outputName,asm_aux):
+def assembly(cpus,assemblyTool,typeReads,forwardFile,reverseFile,outputName,asm_aux):
     if (assemblyTool == 'megahit'):
         assemblyOut='final.contigs.fa'
         if typeReads=='illumina':
-            cmd='megahit -1 '+inputName+'_1.fastq -2 '+inputName+'_2.fastq  -m 0.5 -t 12 -o '+outputName+' -t '+cpus+' '+asm_aux
+            cmd='megahit -1 '+forwardFile+' -2 '+reverseFile+' -m 0.5 -t 12 -o '+outputName+' -t '+cpus+' '+asm_aux
         else:    
-            cmd='megahit -r '+inputName+' -o '+outputName+' -t '+cpus+' '+asm_aux
+            cmd='megahit -r '+forwardFile+' -o '+outputName+' -t '+cpus+' '+asm_aux
         print cmd
         os.system(cmd)
     elif (assemblyTool == 'velvet'):
         assemblyOut='contigs.fa'
         if typeReads=='illumina':
-            cmd='velveth '+outputName+' 31 -fastq -shortPaired -separate '+inputName+'_1.fastq '+inputName+'_2.fastq '+asm_aux
+            cmd='velveth '+outputName+' 31 -fastq -shortPaired -separate '+forwardFile+' '+reverseFile+' '+asm_aux
         else:
-            cmd='velveth '+outputName+' 31 -'+typeReads+' -short '+inputName+' '+asm_aux
+            cmd='velveth '+outputName+' 31 -'+typeReads+' -short '+forwardFile+' '+asm_aux
         print cmd
         os.system(cmd)
         cmd='velvetg '+outputName+' -exp_cov auto -ins_length 260'+' '+asm_aux
         print cmd
-    	os.system(cmd)
+        os.system(cmd)
     elif (assemblyTool == 'newbler'):
         assemblyOut='454LargeContigs.fna'
-        cmd='runAssembly -mi 90 -ml 60 -cpu '+cpus+' -o '+outputName+' '+inputName+' '+asm_aux
-    	print cmd
-    	os.system(cmd) 
+        cmd='runAssembly -mi 90 -ml 60 -cpu '+cpus+' -o '+outputName+' '+forwardFile+' '+asm_aux
+        print cmd
+        os.system(cmd) 
     elif (assemblyTool == 'spades'):
         assemblyOut='contigs.fasta'
         if typeReads=='illumina':
-            cmd='spades.py  -t '+cpus+' -o '+outputName+' -1 '+inputName+'_1.fastq -2 '+inputName+'_2.fastq '+asm_aux
+            cmd='spades.py  -t '+cpus+' -o '+outputName+' -1 '+forwardFile+' -2 '+reverseFile+' '+asm_aux
         else:
-            cmd='spades.py  -t '+cpus+' -o '+outputName+' -s '+inputName+'.typeReads '+asm_aux
+            cmd='spades.py  -t '+cpus+' -o '+outputName+' -s '+forwardFile+' '+asm_aux
         print cmd
         os.system(cmd)
         """
