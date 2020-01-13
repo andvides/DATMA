@@ -1,0 +1,42 @@
+{% set name = "datma" %}
+{% set version = "1.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+build:
+  noarch: python
+  number: 1
+
+source:
+  git_url: https://github.com/andvides/DATMA.git
+
+requirements:
+  run:
+    - augustus >=3.3.2
+    - biopython 1.68
+    - blas 2.5
+    - blast 2.6.0
+    - bwa 0.7.17
+    - checkm-genome 1.0.12
+    - clame
+    - fastqc 0.11.8
+    - mergenotcombined
+    - hmmer
+    - kraken 1.1
+    - krona 2.7
+    - matplotlib 2.2.3
+    - pplacer 1.1.alpha19
+    - prokka 1.13
+    - quast 5.0.2
+    - rapifilt
+    - samtools 1.9
+    - spades 3.13.0
+    - selectfasta    
+    
+about:
+  home: https://github.com/andvides/DATMA
+  license: GNU
+  summary: "DATMA is a distributed automatic pipeline for fast metagenomic analysis that includes: sequencing quality control, 16S-identification, reads binning, de novo assembly, ORF detection and taxonomic annotation."
+  
