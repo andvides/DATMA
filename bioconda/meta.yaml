@@ -18,6 +18,7 @@ requirements:
     - biopython 1.68
     - blas 2.5
     - blast 2.6.0
+    - boost
     - bwa 0.7.17
     - checkm-genome 1.0.12
     - clame
