@@ -1,0 +1,87 @@
+#################################################################################
+#################################################################################
+##DATMA CONFIGURATION FILE                        
+##
+##USE THIS FILE TO PASS THE ARGUMENTS TO EACH TOOL USED IN THE DATMA WORK FLOW
+##SEE DATMA MANUAL FOR DETAILS
+##VERSION 2 20-11-2018
+#################################################################################
+#
+#Stages
+#1.Clean de reads 
+#2.Remove 16S sequences
+#3.CLAME rounds
+#4.Assemble and Annotate each bin by separated
+#5.Final report
+#use start_in flag to start in a particular stage (INCLUDE the stage,default 1)
+#use end_in flag to start in a particular stage (NOT include the stage, default 6)
+#
+#################################################################################
+#GENERAL PARAMETERS
+#################################################################################
+-start_in 1
+#-end_in 4
+-inputFile /DATMA/fastas/camiMED/forward.fq,/DATMA/fastas/camiMED/reverse.fq
+-outputDir /DATMA/fastas/camiMED/DATMA_OUT_s1/
+-cpus 40
+-typeReads illumina
+#################################################################################
+#Quality Control Configuration
+#################################################################################
+#-cleanTool trimmomatic
+-lq 30
+-rq 30
+-m  60
+-wq: 2
+-trimmomatic_path /DATMA//tools/Trimmomatic-0.38/
+#################################################################################
+#Merge illunima files using FLASH tool
+#################################################################################
+#fb: Number of bases for set a merge (default 0)
+-fb 5
+#################################################################################
+#16S-REMOVE
+#################################################################################
+-database_16s_fasta /DATMA/fastas/16sDatabase/rfam/RFAM_db.fasta
+-database_16s_fm9 /DATMA/fastas/16sDatabase/rfam/rfam.fm9
+-RDP_path /DATMA/tools/RDPTools/
+-useBWA
+#################################################################################
+#CLAME
+#################################################################################
+-bases 70,50,25
+-sizeBin 50000
+-clame_aux -print
+-ld 10
+#-fm9 /DATMA/fastas/camiLOW/DATMA_OUT3/readsForbin
+-block 20000000
+#use -aux_clase to pass other parameter example tol or fw bases
+-clame_aux -tol 0.1
+#################################################################################
+#ASSEMBLY OPTIONS
+#################################################################################
+-assembly spades
+-asm_aux --only-assembler
+#################################################################################
+#ASSEMBLY QUALITY WITH QUAST TOOL OPTIONS
+#################################################################################
+#ref_name="PATH to ref used to asses the bin completeness"
+#-use_ref 
+#-ORF_aux -p meta
+#
+#################################################################################
+#BLAST
+#################################################################################
+-database_nt  /DATMA/fastas/NT/NT_May_2019/nt
+#################################################################################
+#Kaiju
+#################################################################################
+-database_kaiju  /DATMA/tools/kaiju/kaijudb/
+#################################################################################
+#Krona
+#################################################################################
+#-combine
+#################################################################################
+#BUSCCO
+#################################################################################
+-lineage /DATMA/tools/busco/bacteria/
