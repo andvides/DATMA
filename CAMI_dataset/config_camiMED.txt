@@ -4,7 +4,7 @@
 ##
 ##USE THIS FILE TO PASS THE ARGUMENTS TO EACH TOOL USED IN THE DATMA WORK FLOW
 ##SEE DATMA MANUAL FOR DETAILS
-##VERSION 2 20-11-2018
+##VERSION 3 20-01-2020
 #################################################################################
 #
 #Stages
