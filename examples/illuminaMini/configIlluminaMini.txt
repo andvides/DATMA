@@ -21,8 +21,8 @@
 #################################################################################
 -start_in 1
 #-end_in 4
--inputFile /DATMA/tools/DATMA/examples/illuminaMini/forward.fq,/DATMA//tools/DATMA/examples/illuminaMini/reverse.fq
--outputDir /DATMA/tools/DATMA/examples/illuminaMini/DATMA_OUT
+-inputFile /DATMA/examples/illuminaMini/reads/forward.fq,/DATMA/examples/illuminaMini/reads/reverse.fq
+-outputDir /DATMA/examples/illuminaMini/DATMA_OUT
 -cpus 4
 -typeReads illumina
 #################################################################################
@@ -42,8 +42,8 @@
 #################################################################################
 #16S-REMOVE
 #################################################################################
--database_16s_fasta /DATMA//fastas/16sDatabase/rfam/RFAM_db.fasta
--database_16s_fm9 /DATMA//fastas/16sDatabase/rfam/rfam.fm9
+-database_16s_fasta /DATMA/16sDatabase/rfam/RFAM_db.fasta
+-database_16s_fm9 /DATMA/16sDatabase/rfam/rfam.fm9
 -RDP_path /DATMA/tools/RDPTools/
 -useBWA
 #################################################################################
