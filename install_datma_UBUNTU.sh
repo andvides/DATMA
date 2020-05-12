@@ -103,6 +103,13 @@ cd genFm9
 make
 cp genFm9 ../../bin/
 cd ..
+
+#binning
+echo 'Installing binning'
+cd binning
+make
+cp binning ../../bin/
+cd ..
 cd ..
 
 #Flash
