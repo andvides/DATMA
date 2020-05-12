@@ -1,8 +1,0 @@
-#!/bin/bash
-pwd=`pwd`
-configFile=$1
-pwd
-cd $datmaPATH
-bash $datmaPATH/runDATMA.sh $configFile seq
-cd $pwd
-
