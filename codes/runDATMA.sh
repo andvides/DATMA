@@ -9,12 +9,12 @@ mode="$2" #mode sequential (seq) or distributed (compss)
 
 if [ "$2" = 'seq' ]; then
     echo "Running DATMA in sequential mode."
-    python datma_seq.py -f $config
-    python finalReport.py -f $config
+    datma_seq.py -f $config
+    finalReport.py -f $config
 elif [ "$2" = 'compss' ]; then
     echo "Running DATMA with COMPSs support."
-    runcompss --master_name=pc -d --lang=python ./datma.py -f $config
-    python finalReport.py -f $config
+    runcompss --master_name=pc -d --lang=python datma.py -f $config
+    finalReport.py -f $config
 else
     echo "Select between sequential or  distributed mode (see DATMA manual)"
     exit 1;

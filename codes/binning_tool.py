@@ -31,16 +31,15 @@ def BinReads(direct,param,outName,flags,roundNum):
         list2Exclude=direct.globalOutput+'/'+outName.balance+'.exclude'
         fm9ref=direct.globalOutput+'/'+outName.balance#+'.fm9'
         index=direct.globalOutput+'/'+outName.balance+'.index'
-        
+        numReads=sum(1 for line in open(index))
         totalFM=len(glob.glob(fm9ref+'*.fm9'))
-        print "TOTAL FM9: "+str(totalFM)
+        print("TOTAL FM9: "+str(totalFM)+" numReads: "+str(numReads))
         offset=param.block
         block=param.block
-        mapping2FM9(cpus,base,inputFile,outputFile,typeReads,fm9ref,'-print',list2Exclude,clame_aux,totalFM,offset,block)
+        mapping2FM9(cpus,base,numReads,inputFile,outputFile,typeReads,fm9ref,'-print',list2Exclude,clame_aux,totalFM,offset,block)
         
         #binning
         resultName=outputFile#+'.result'
-        numReads=sum(1 for line in open(index))
         binning2FM9(cpus,resultName,outputFile,index,numReads,ld,sizeBin,clame_aux,list2Exclude)
         
         #excludeList =outputFile+'.exclude'
@@ -63,13 +62,13 @@ def BinReads(direct,param,outName,flags,roundNum):
         #bins.sort(key=lambda x: int(x.split(outName.clame)[1].split(".")[0][1:]))
         #extractBinnedReads(direct,param,outName,bins,flags,roundNum)
         
-        print "PASS 3: Binning ... DONE"
+        print("PASS 3: Binning ... DONE")
     else:
         outputFile+='_0.'+typeReads
         if not (os.path.exists(outputFile)):
             #symbolic link to the original file
             os.symlink(inputFile,outputFile)
-        print 'No binning stage selected'
+        print('No binning stage selected')
 
 def extractBinnedReads2(direct,param,outName,bins,flags,roundNum):
     cpus=param.cpus
@@ -91,11 +90,11 @@ def extractBinnedReads2(direct,param,outName,bins,flags,roundNum):
     
     #Remove temporal files
     cmd='wc -l '+outputFile+'.list'
-    print cmd
+    print(cmd)
     os.system(cmd) 
     
     cmd='rm '+outputFile+'.list'
-    print cmd
+    print(cmd)
     #os.system(cmd) 
     
 def extractBinnedReads(direct,param,outName,bins,flags,roundNum):
@@ -114,8 +113,8 @@ def extractBinnedReads(direct,param,outName,bins,flags,roundNum):
         firstC='@'
         module=4
     else:
-        print 'Quality Filter stage:ERROR IN THE CONFIGURATION FILE'
-        print "Unknown reads' format"
+        print('Quality Filter stage:ERROR IN THE CONFIGURATION FILE')
+        print("Unknown reads' format")
         sys.exit(0)
         
     fsrc2=open(outputFile+'.list','w')     
@@ -132,6 +131,6 @@ def extractBinnedReads(direct,param,outName,bins,flags,roundNum):
     
     #Remove temporal files
     cmd='rm '+outputFile+'.list'
-    print cmd
+    print(cmd)
     os.system(cmd) 
 

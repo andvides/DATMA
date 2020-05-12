@@ -17,7 +17,7 @@ def assembly_annotation(suffix,prefix,forwardFile,reverseFile,contigsFile,contig
     #Make temp directory 
     directory= '~/DATMA_run_'+suffix
     cmd='mkdir -p '+directory
-    print cmd
+    print(cmd)
     os.system(cmd) 
 
     typeReads=prefix
@@ -86,7 +86,7 @@ def assembly_annotation(suffix,prefix,forwardFile,reverseFile,contigsFile,contig
     #remove temp directory 
     directory= '~/DATMA_run_'+suffix
     cmd='rm -r '+directory
-    #os.system(cmd) 
+    os.system(cmd) 
     
 # assembler
 def assembly(cpus,assemblyTool,typeReads,forwardFile,reverseFile,outputName,asm_aux):
@@ -96,7 +96,7 @@ def assembly(cpus,assemblyTool,typeReads,forwardFile,reverseFile,outputName,asm_
             cmd='megahit -1 '+forwardFile+' -2 '+reverseFile+' -m 0.5 -t 12 -o '+outputName+' -t '+cpus+' '+asm_aux
         else:    
             cmd='megahit -r '+forwardFile+' -o '+outputName+' -t '+cpus+' '+asm_aux
-        print cmd
+        print(cmd)
         os.system(cmd)
     elif (assemblyTool == 'velvet'):
         assemblyOut='contigs.fa'
@@ -104,15 +104,15 @@ def assembly(cpus,assemblyTool,typeReads,forwardFile,reverseFile,outputName,asm_
             cmd='velveth '+outputName+' 31 -fastq -shortPaired -separate '+forwardFile+' '+reverseFile+' '+asm_aux
         else:
             cmd='velveth '+outputName+' 31 -'+typeReads+' -short '+forwardFile+' '+asm_aux
-        print cmd
+        print(cmd)
         os.system(cmd)
         cmd='velvetg '+outputName+' -exp_cov auto -ins_length 260'+' '+asm_aux
-        print cmd
+        print(cmd)
         os.system(cmd)
     elif (assemblyTool == 'newbler'):
         assemblyOut='454LargeContigs.fna'
         cmd='runAssembly -mi 90 -ml 60 -cpu '+cpus+' -o '+outputName+' '+forwardFile+' '+asm_aux
-        print cmd
+        print(cmd)
         os.system(cmd) 
     elif (assemblyTool == 'spades'):
         assemblyOut='contigs.fasta'
@@ -120,61 +120,61 @@ def assembly(cpus,assemblyTool,typeReads,forwardFile,reverseFile,outputName,asm_
             cmd='spades.py  -t '+cpus+' -o '+outputName+' -1 '+forwardFile+' -2 '+reverseFile+' '+asm_aux
         else:
             cmd='spades.py  -t '+cpus+' -o '+outputName+' -s '+forwardFile+' '+asm_aux
-        print cmd
+        print(cmd)
         os.system(cmd)
         """
         cmd='cp '+inputName+' '+outputName+'_temp.'+typeReads
-        print cmd
+        print(cmd)
         os.system(cmd)
         #cmd='spades.py --only-assembler -t '+cpus+' -o '+outputName+' -s '+outputName+'_temp.'+typeReads
         cmd='spades.py  -t '+cpus+' -o '+outputName+' -s '+outputName+'_temp.'+typeReads+' '+asm_aux
-        print cmd
+        print(cmd)
         os.system(cmd)
         """
     else:
-        print "Error assembly no assigned"
+        print("Error assembly no assigned")
         sys.exit(0)
         
     return assemblyOut
 
-    print "PASS 4: assembling ... DONE"
+    print("PASS 4: assembling ... DONE")
 
 #assembler quality
 def ass_quast(cotigs_in,dir_out,ref,ref_name,quast_aux):
     if ref:
         cmd='quast.py -o '+dir_out+' '+cotigs_in+' -r '+ref_name+' '+quast_aux 
-        print cmd
+        print(cmd)
         os.system(cmd)
     else:
         cmd='quast.py -o '+dir_out+' '+cotigs_in+' '+quast_aux
-        print cmd
+        print(cmd)
         os.system(cmd)
 
 #Open reading frames compute
 def orfs(inputName,outputName,ORF_aux):
     cmd='prodigal -i '+inputName+' -o '+outputName+' -a '+outputName+'.faa'+' '+ORF_aux
-    print cmd
+    print(cmd)
     os.system(cmd) 
-    print "PASS 5: ORF ... DONE"
+    print("PASS 5: ORF ... DONE")
 
     
     
 #Annotation for each bin using blastn
 def annotate_blastn(cpus,database,inputName,outputName,blast_aux):
     cmd='blastn -query '+inputName+' -out '+outputName+' -db  '+database+' -outfmt 6 -num_alignments 3 -num_threads '+cpus+' '+blast_aux
-    print cmd
+    print(cmd)
     os.system(cmd)
-    print "PASS 7: Blastn ... DONE"
+    print("PASS 7: Blastn ... DONE")
 
 def annotate_kaiju(cpus,database,inputName,outputName,kaiju_aux):
     cmd='kaiju -z '+cpus+' -t '+database+'/nodes.dmp -f '+database+'/kaiju_db.fmi -i '+inputName+' -o '+outputName+' '+kaiju_aux
-    print cmd
+    print(cmd)
     os.system(cmd)
         
     kronaName=outputName.split('.')
     kronaName=kronaName[0]+'.krona'
     cmd='kaiju2krona -t '+database+'/nodes.dmp -n '+database+'/names.dmp -i '+outputName+' -o '+kronaName
-    print cmd
+    print(cmd)
     os.system(cmd)    
 
 def makeReport(typeReads,inputName):

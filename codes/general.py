@@ -15,7 +15,7 @@ class parameters:
     typeReads='sff'
 
     #Quality Control
-    trimmomatic_path='~/DATMA/tools/Trimmomatic-0.38/'
+    trimmomatic_path='none'
     cleanTool='rapifilt'
     te=0    
     tb=0    
@@ -31,17 +31,18 @@ class parameters:
     forceMerge=False
     
     #16S-remove
-    database_16s_fasta='~/DATMA/16sDatabases/ncbi/16SMicrobial.fasta'
-    database_16s_fm9='~/DATMA/16sDatabases/ncbi/ncbi.fm9'
-    RDP_path='~/DATMA/tools/RDPTools'
+    database_16s_fasta=''
+    database_16s_fm9=''
+    RDP_path='none'
     aux_16s=" "
     useBWA=False
     
     #CLAME parameters
-    bases='70,60,50,40,30,20'
+    bases='70,60'
     base=70
     ld=2
     sizeBin=2000
+    sizeBlock=2000
     nu=3 
     w=0
     clame_aux=" "
@@ -61,23 +62,23 @@ class parameters:
     checkm_aux=" "
 
     #BLAST
-    database_nt='~/DATMA/blastdb/nt'
-    database_nr='~/DATMA/blastdb/nr'
+    database_nt=''
+    database_nr=''
     blast_aux=" "
     
     #Kaiju
-    database_kaiju='~/DATMA/tools/kaiju/kaijudb'
+    database_kaiju=''
     kaiju_aux=" "
 
 #Tools that compose the DATMA framework  
 #all the tools need to be added to user PATH
 class tools:
     manual = 'save the tools names'
-    names=['selectFasta','rapifilt','flash',
+    names=['selectFasta','rapifilt','flash2',
            'bwa','samtools','mapping','genFm9','clame',
            'megahit','spades.py','velvetg',
            'blastn','kaiju','quast.py','prodigal',
-           'ktImportBLAST','checkm']
+           'ktImportBLAST','checkm','busco']
 
 #Directorie path for the outputs
 class directories:
@@ -117,9 +118,9 @@ def is_tool(tool):
     for items in tool.names:
         rc = subprocess.call(['which', items])
         if rc:
-            print items,' missing in path!'
+            print(items,' missing in path!')
             sys.exit(0)
-    print 'PASS: all the tools are installed'      
+    print('PASS: all the tools are installed')
     
 # Read configuration file
 def readConfigFile(fileName, param):
@@ -149,8 +150,8 @@ def readConfigFile(fileName, param):
             typeReads=words[1]
             param.typeReads=typeReads 
             if not (param.typeReads=='sff' or param.typeReads=='illumina' or param.typeReads=='fastq' or param.typeReads=='fasta'):
-                print "ERROR IN THE CONFIGURATION FILE"
-                print "unsupported reads' format"
+                print("ERROR IN THE CONFIGURATION FILE")
+                print("unsupported reads' format")
                 sys.exit(0)
         
         #Quality control tools
@@ -233,7 +234,7 @@ def readConfigFile(fileName, param):
         elif line.startswith('-assembly'):
             param.assembly=words[1]
         elif line.startswith('-asm_aux'):
-            param.asm_aux=words[1]
+            param.asm_aux=" ".join(str(x) for x in words[1:])
         elif line.startswith('-ORF_aux'):
             param.ORF_aux=" ".join(str(x) for x in words[1:])
         #Kaiju parameters
@@ -245,10 +246,10 @@ def readConfigFile(fileName, param):
     fsrc1.close()
 
     if error: #NO madatory inputs 
-        print "ERROR IN THE CONFIGURATION FILE"
+        print("ERROR IN THE CONFIGURATION FILE")
         sys.exit(0)
     else:
-        print "PASS: Configuraion file loaded successfully"
+        print("PASS: Configuraion file loaded successfully")
 
         
         
@@ -287,12 +288,12 @@ def pipelineFlow(param,stageFlags):
         elif startStage==6:                 #from prodigal
             stageFlags.prodigal=True
         
-        print 'STAGES: ',
+        print('STAGES: ',)
         attrs = vars(stageFlags)
-        print ', '.join("%s: %s" % item for item in attrs.items())
+        print(', '.join("%s: %s" % item for item in attrs.items()))
 
     else:
-        print "ERROR IN THE CONFIGURATION FILE"
+        print("ERROR IN THE CONFIGURATION FILE")
         sys.exit(0)   
         
 
@@ -304,29 +305,29 @@ def builDirectory(direct,param,flags):
         direct.globalOutput=param.outputFile
         directory=direct.globalOutput
         if(os.path.exists(directory)):
-            print 'Using an existing directory: ',directory 
-            print 'start in: ',startStage,' Building: ',directory,' for: ',inputFile
+            print('Using an existing directory: ',directory) 
+            print('start in: ',startStage,' Building: ',directory,' for: ',inputFile)
             cmd="mkdir -p "+directory
-            print cmd
+            print(cmd)
             os.system(cmd)   
         else:
-            print 'start in: ',startStage,' Building: ',directory,' for: ',inputFile
+            print('start in: ',startStage,' Building: ',directory,' for: ',inputFile)
             cmd="mkdir "+directory
-            print cmd
+            print(cmd)
             os.system(cmd)
     else:
         direct.globalOutput=param.outputFile
         directory=direct.globalOutput
-        print 'using: ',directory 
+        print('using: ',directory) 
 
 #Generate the final report        
 def finalReport(binName):
     cmd="mkdir "+binName
-    print cmd
+    print(cmd)
     os.system(cmd)
     
     cmd="mv "+binName+'.* '+binName
-    print cmd
+    print(cmd)
     os.system(cmd)
 
 def tablaReport(section):
@@ -367,22 +368,22 @@ def list2rawReads(binName,param,directory):
         input1=directory+"/clean/clean_reads_1.fastq"
         input2=directory+"/clean/clean_reads_1.fastq"
         cmd='selectFasta -fasta_sel -list '+binName+' -fastq '+input1+' >'+outFile+'_1.fastq'
-        print cmd
+        print(cmd)
         os.system(cmd)
 
         cmd='selectFasta -fasta_sel -list '+binName+' -fastq '+input2+' >'+outFile+'_2.fastq'
-        print cmd
+        print(cmd)
         os.system(cmd)
     elif typeReads=='fasta':
         input1=directory+"/clean/clean_reads.fastq"
         cmd='selectFasta -fasta_sel -list '+binName+' -fasta '+input1+' >'+outFile+'.fasta'
-        print cmd
+        print(cmd)
         os.system(cmd) 
         
     else:
         input1=directory+"/clean/clean_reads.fastq"
         cmd='selectFasta -fasta_sel -list '+binName+' -fastq '+input1+' >'+outFile+'.fastq'
-        print cmd
+        print(cmd)
         os.system(cmd) 
 
 

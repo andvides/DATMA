@@ -94,28 +94,30 @@ def readConfigFile(fileName, param):
             typeReads=words[1]
             param.typeReads=typeReads 
             if not (param.typeReads=='sff' or param.typeReads=='illumina' or param.typeReads=='fastq' or param.typeReads=='fasta'):
-                print "ERROR IN THE CONFIGURATION FILE"
-                print "unsupported reads' format"
+                print("ERROR IN THE CONFIGURATION FILE")
+                print("unsupported reads' format")
         elif line.startswith('-combine'): 
             param.combine='-c' 
         elif line.startswith('-checkm_aux'): 
             param.checkm_aux=words[1]            
         elif line.startswith('-lineage'): 
-            param.lineage=words[1]    
+            param.lineage=words[1] 
+        elif line.startswith('-delete'): 
+            param.delete=True
 #BUSCO
 def runBusco(cpus,inputName,outputName,lineage,tmp):
     cmd='busco -c '+cpus+' -f -m genome -i '+inputName+' -o '+outputName+' -l '+lineage+' -t '+tmp 
-    print cmd
+    print(cmd)
     os.system(cmd) 
-    print "PASS BUSCO DONE"    
+    print("PASS BUSCO DONE")
      
 def runCheckM (cpus,binDir,checkmDir,checkm_aux):
     cmd='checkm lineage_wf -t '+str(cpus)+' '+binDir+' '+checkmDir+' '+checkm_aux
-    print cmd
+    print(cmd)
     os.system(cmd)
     
     cmd='checkm qa '+checkmDir+'lineage.ms '+checkmDir+' > '+checkmDir+'resumenCheckM.txt'
-    print cmd
+    print(cmd)
     os.system(cmd)
     
 def makeCheckM_report(CheckM_resumen,CheckM_html):
@@ -126,7 +128,7 @@ def makeCheckM_report(CheckM_resumen,CheckM_html):
     for line in rows:
         words=line.split("\n") 
         words=words[0] 
-        print words
+        print(words)
         if 'round' in words:
             colums=words.split()#re.split(r'\s+',words)
             file.write('<tr>\n')
@@ -147,6 +149,7 @@ class parameters:
     combine=' '
     checkm_aux=''
     lineage=''
+    delete=False;
     
 if __name__ == "__main__":
     #Final report
@@ -163,7 +166,7 @@ if __name__ == "__main__":
     if args.file :
         readConfigFile(args.file,param)    
         if(param.endWorkflow!=100):
-            print "Not file report generated"
+            print("Not file report generated")
             exit(10)
             
         directory=param.outputFile
@@ -177,12 +180,12 @@ if __name__ == "__main__":
         #BUSCO
         buscoDir=directory+'/busco/'
         cmd='rm -r '+buscoDir+'/*'
-        print cmd
+        print(cmd)
         os.system(cmd) 
         
         my_dict2 = {}
         cmd='mkdir -p '+buscoDir
-        print cmd
+        print(cmd)
         os.system(cmd) 
         
         os.chdir(buscoDir)
@@ -194,7 +197,7 @@ if __name__ == "__main__":
             outputName=buscoDir
             runBusco(param.cpus,files,suffix,param.lineage,buscoDir)
             cmd='mv -f run_'+suffix+' '+outputName
-            print cmd
+            print(cmd)
             os.system(cmd) 
             
             fileName=outputName+'run_'+suffix+'/short_summary_'+suffix+'.txt'
@@ -203,7 +206,15 @@ if __name__ == "__main__":
                     if 'C:' in line:
                         line=line.replace(",", ";")
                         my_dict2[suffix]=line[1:-1];
-        print my_dict2
+        print(my_dict2)
+        pathDataset=directory+'/busco'
+        cmd='mkdir -p '+pathDataset+'/output_set'
+        print(cmd)
+        os.system(cmd)
+            
+        cmd='cp '+pathDataset+'/run_*/*.txt '+pathDataset+'/output_set/'
+        print(cmd)
+        os.system(cmd)
 
         #Run Krona
         combine=param.combine
@@ -215,7 +226,7 @@ if __name__ == "__main__":
         file.close()
         
         pathDataset=directory+'/round_*/clameBin_*.f*'
-        #print pathDataset
+        #print(pathDataset)
         finalBins=glob.glob(pathDataset)
         suffix=finalBins[0].split('.')
         typeReads=suffix[1]
@@ -223,7 +234,7 @@ if __name__ == "__main__":
         my_dict = {}
        
         pathDataset=directory+'/round_*/clameBin_*.'+typeReads
-        #print pathDataset
+        #print(pathDataset)
         finalBins=glob.glob(pathDataset)
         for files in finalBins:
             suffix=files.split('.')
@@ -233,11 +244,11 @@ if __name__ == "__main__":
             suffix=suffix[-2]+'_'+temp
             bins,bases=makeReport(typeReads,files)
             text=bins+","+bases+','
-            #print suffix,':',text
+            #print(suffix,':',text)
             my_dict[suffix]=text;
 
         pathDataset=directory+'/bins/*contigs.fna'
-        #print pathDataset
+        #print(pathDataset)
         finalBins=glob.glob(pathDataset)
         for files in finalBins:
             suffix=files.split('_contigs')
@@ -245,12 +256,12 @@ if __name__ == "__main__":
             suffix=suffix[-1]
             contigs,genome=makeReport('fasta',files)
             text=contigs+","+genome+','
-            #print suffix,'->',text
+            #print(suffix,'->',text)
             my_dict[suffix]+=text;
             
             
         pathDataset=directory+'/bins/*orfsFile.faa'
-        #print pathDataset
+        #print(pathDataset)
         finalBins=glob.glob(pathDataset)
         for files in finalBins:
             suffix=files.split('_orfsFile')
@@ -262,17 +273,17 @@ if __name__ == "__main__":
         
         ##BUSCO
         pathDataset=directory+'/bins/*contigs.fna'
-        #print pathDataset
+        #print(pathDataset)
         finalBins=glob.glob(pathDataset)
         for files in finalBins:
             suffix=files.split('_contigs')
             suffix=suffix[0].split('/')
             suffix=suffix[-1]
             my_dict[suffix]+=','+my_dict2[suffix];
-            print my_dict2[suffix]
+            print(my_dict2[suffix])
         
         pathDataset=directory+'/bins/*html'
-        print pathDataset
+        print(pathDataset)
         finalBins=glob.glob(pathDataset)
         for files in finalBins:
             suffix=files.split('_contigs_qual')
@@ -293,25 +304,25 @@ if __name__ == "__main__":
         my_dict[suffix]+=text;
         
         
-        #print '******************************************************'
-        #print my_dict
-        #print '******************************************************'
+        #print('******************************************************')
+        #print(my_dict)
+        #print('******************************************************')
         sortednames=sorted(my_dict.keys(), key=lambda x:x.lower())
-        print '******************************************************'
-        print sortednames
-        print '******************************************************'
+        print('******************************************************')
+        print(sortednames)
+        print('******************************************************')
         
         file = open(reportFile, 'a')
         for items in sortednames:
-            #print '<tr>\n'
+            #print('<tr>\n')
             file.write('<tr>\n')
             file.write('\t<th>'+items+'</th>\n')
-            #print '\t<th>'+items+'</th>\n'
+            #print('\t<th>'+items+'</th>\n')
             for elements in my_dict[items].split(','):
-                #print '\t<th>'+elements+'</th>\n'
+                #print('\t<th>'+elements+'</th>\n')
                 file.write('\t<th>'+elements+'</th>\n')
             file.write('<tr>\n')
-            #print '<tr>\n'
+            #print('<tr>\n')
 
         #file = open(reportFile, 'a')
         file.write(tablaReport('end'))
@@ -326,34 +337,34 @@ if __name__ == "__main__":
         
         ##Taxonomical report
         pathDataset=directory+'/bins/*blastFile.tab'
-        #print pathDataset
+        #print(pathDataset)
         finalBins=glob.glob(pathDataset)
         finalBins.sort()
         finalTaxo=' '#directory+'/16sSeq/contigs/16S_blastFile.tab '
         for taxos in finalBins:
             finalTaxo+=taxos+' '
-        #print finalTaxo
+        #print(finalTaxo)
         
         cmd='ktImportBLAST '+finalTaxo+' -o '+directory+'/binsBlastn.html '+combine
-        print cmd
+        print(cmd)
         os.system(cmd)
 
         pathDataset=directory+'/bins/*kaijuFile.txt'
-        #print pathDataset
+        #print(pathDataset)
         finalBins=glob.glob(pathDataset)
         finalBins.sort()
         finalTaxo=' '#directory+'/16sSeq/contigs/16S_kaijuFile.krona '
         for taxos in finalBins:
             finalTaxo+=taxos+' '
-        #print finalTaxo
+        #print(finalTaxo)
 
         cmd='ktImportText '+finalTaxo+' -o '+directory+'/binsKaiju.html '+combine
-        print cmd
+        print(cmd)
         os.system(cmd)
         
         #16sReport
         cmd='ktImportRDP '+directory+'/16sSeq/all_16S.rdp'+' -o '+directory+'/16S_rdp.html '+combine
-        print cmd
+        print(cmd)
         os.system(cmd) 
     
         
@@ -361,5 +372,61 @@ if __name__ == "__main__":
         file = open(resumenFile, 'w')
         file.write(joinHtml())
         file.close()
-
-
+        
+        cmd='mkdir -p '+directory+'/htmls'
+        print(cmd)
+        os.system(cmd)
+        
+        cmd='mv '+directory+'/*.html '+directory+'/htmls/'
+        print(cmd)
+        os.system(cmd)
+        
+        cmd='mv '+CheckM_html+' '+directory+'/htmls/'
+        print(cmd)
+        os.system(cmd)
+        
+        #if the user selected this flag no essensial files are deleted 
+        if(param.delete):
+            #delete clean directory, only conserved clean_reads compressed
+            #pathDataset=directory+'/clean/'
+            #cmd='gzip '+pathDataset+'/clean_reads.'+typeReads
+            #print(cmd)
+            #os.system(cmd)    
+            
+            pathDataset=directory+'/clean/'
+            cmd='rm '+pathDataset+'/*.txt '+pathDataset+'/*.'+typeReads
+            print(cmd)
+            os.system(cmd)    
+            
+            #delete 16s rRNA
+            pathDataset=directory+'/16sSeq/'
+            cmd='rm '+pathDataset+'/*.'+typeReads
+            print(cmd)
+            os.system(cmd) 
+            
+            #readsForbin
+            pathDataset=directory
+            cmd='rm '+pathDataset+'/*.fm9 '+pathDataset+'/*.'+typeReads #pathDataset/*.index
+            os.system(cmd)
+            
+            #round
+            pathDataset=directory+'/round_*'
+            cmd='rm '+pathDataset+'/*.index '+pathDataset+'/*.baseIndex '+pathDataset+'/*.links '+pathDataset+'/*.resultb '+pathDataset+'/*.'+typeReads
+            print(cmd)
+            os.system(cmd)
+            
+            #busco
+            pathDataset=directory+'/busco'
+            cmd='rm -rf '+pathDataset+'/run_*/'
+            print(cmd)
+            os.system(cmd)
+            
+            #CheckM
+            pathDataset=directory+'/checkm_out'
+            cmd='rm -rf '+pathDataset+'/bins/ '+pathDataset+'/storage '+pathDataset+'/lineage.ms'
+            print(cmd)
+            os.system(cmd)
+            
+            
+            
+            
