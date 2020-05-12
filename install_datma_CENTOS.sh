@@ -17,6 +17,7 @@ sudo yum install ant
 sudo yum install zlib1g-dev
 sudo yum install -y pkg-config libfreetype6-dev libpng-dev python-matplotlib
 sudo yum install numpy
+echo 'End dependencies'
 
 #install BWA
 sudo yum install -y bwa
@@ -30,6 +31,7 @@ sudo pip install checkm-genome --upgrade --no-deps
 sudo checkm data update
 
 #Making the bin directory
+mkdir tools
 cd tools
 mkdir bin
 
@@ -46,7 +48,9 @@ cd ..
 
 #install selectFasta
 echo 'Installing selectFasta'
-cd selectFasta
+wget https://github.com/andvides/selectFasta/releases/download/v1.0/selectFasta_v1.zip
+unzip selectFasta_v1.zip
+cd selectFasta_v1
 make
 cp selectFasta ../bin/
 cd ..
@@ -62,31 +66,52 @@ cd ..
 
 #install RAPIFILT
 echo 'Installing RAPIFILT'
-cd rapifilt
+wget https://github.com/andvides/RAPIFILT/releases/download/v1.0/RAPIFILT_v1.zip
+unzip RAPIFILT_v1.zip
+cd RAPIFILT_v1
 make
 cp rapifilt ../bin/
 cd ..
 
 #install mergeNotCombined
 echo 'Installing mergeNotCombined'
-cd mergeNotCombined
+wget https://github.com/andvides/mergeNotCombined/releases/download/v1.0/mergeNotCombined_v1.zip
+unzip mergeNotCombined_v1.zip
+cd mergeNotCombined_v1
 make
 cp mergeNotCombined ../bin/
 cd ..
+
+#install clame
+echo "Installing CLAME"
+wget https://github.com/andvides/CLAME/releases/download/v1.0/CLAME_v1.zip
+unzip CLAME_v1.zip
+cd CLAME_v1
+make
+cp clame ../bin/
 
 #install mapping (SDSL installed)
 echo 'Installing mapping'
 cd mapping
 make
-cp mapping ../bin/
+cp mapping ../../bin/
 cd ..
 
 #genFm9
 echo 'Installing genFM9'
 cd genFm9
 make
-cp genFm9 ../bin/
+cp genFm9 ../../bin/
 cd ..
+
+#binning
+echo 'Installing binning'
+cd binning
+make
+cp binning ../../bin/
+cd ..
+cd ..
+
 
 #Flash
 echo 'Installing Flash'
@@ -94,13 +119,6 @@ git clone https://github.com/dstreett/FLASH2.git
 cd FLASH2
 make
 cp flash2 ../bin/flash
-cd ..
-
-#CLAME
-echo 'Installing CLAME'
-cd CLAME
-make
-cp clame ../bin/
 cd ..
 
 #Megahit
@@ -199,6 +217,8 @@ else
 fi
 
 #FINISH
+echo 'Updating the PATH to include the tools'
+pwd=`pwd`
+export PATH=$pwd/bin/:$PATH
 echo 'DATMA INSTALLED'
-echo 'Please update your PATH to include build tools'
-echo 'export PATH=<intall_PATH>/DATMA/tools/bin/:$PATH'
+cd ..
