@@ -50,7 +50,7 @@
 # by rapifilt or trimmomatic tools
 ############################################################
 #-cleanTool trimmomatic
-#-trimmomatic_path /home/users/DATMA/tools/Trimmomatic-0.38/
+#-trimmomatic_path /DATMA/tools/Trimmomatic-0.38/
 -lq 30
 -rq 30
 -m 60
