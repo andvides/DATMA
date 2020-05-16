@@ -1,1 +1,153 @@
-aa
+############################################################
+############################################################
+##DATMA CONFIGURATION-FILE
+##USE THIS FILE TO PASS THE ARGUMENTS
+##TO EACH TOOL USED IN THE DATMA WORKFLOW
+##SEE DATMA MANUAL FOR DETAILS
+##VERSION 1 20-04-2020
+############################################################
+#STAGES
+############################################################
+#1.Sequencing quality control
+#2.16S rRNA-identification
+#3.CLAME reads binning
+#4.Assembly, ORF prediction, and taxonomic annotation
+#5.Final report
+#-start_in: Flag to start in a particular stage
+# (INCLUDE the stage, [default: 1])
+#-end_in: Flag to end in a particular stage
+# (EXCLUDE the stage, [default: 6])
+############################################################
+-start_in 1
+#-end_in 4
+############################################################
+#GENERAL PARAMETERS
+#inputFile: DNA input file, the files can be gz compressed
+#outputDir: Directory to store all the resulting files
+#cpus: Number of threads. [default: 1]
+#typeReads: Use fastq, fasta, sff for unpaired reads or
+# Use Illumina for paired-end reads
+# (pass forward and reverse by a comma separated)
+############################################################
+-inputFile /DATMA/examples/Biosolid/Biosolid_rawReads.sff
+-outputDir /DATMA/examples/Biosolid/Biosolid_out
+-cpus 30
+-typeReads sff
+############################################################
+#Quality Control Configuration
+#cleanTool: It can be trimmomatic or rapifilt
+# [default: rapifilt].
+#trimmomatic_path: Alternative path for trimmomatic tool
+#-lq: Set the lef-cut value for quality scores
+# [default: 0]
+#-rq: Set the right-cut value for quality scores
+# [default: 0]
+#-m: Filter sequence shorter than min_len
+# [default: 1]
+#-wq: Set windows size to check on the quality scores
+# [default: 1]
+#-quality_aux: Use this flag to set other options supported
+# by rapifilt or trimmomatic tools
+############################################################
+#-cleanTool trimmomatic
+#-trimmomatic_path /DATMA/tools/Trimmomatic-0.38/
+-lq 30
+-rq 30
+-m 70
+-wq: 2
+############################################################
+#MERGE ILLUMINA FILES USIGN FLASH TOOL
+#-fb: Fragment length to merge reads [default 5]
+#-flash_aux: Set other options supported by FLASH tool
+#-forceMerge: Enable force merge of reads
+# that were not combined by FLASH
+############################################################
+-fb 5
+############################################################
+#16S rRNA detection
+#-database_16s_fasta: Path to the 16S rRNA database
+#-useBWA: Enable BWA to map raw reads
+# against a 16S rRNA database
+#-RDP_path: Alternative PATH to RDP_CLASSIFIER tool
+#-aux_16s: Use this flag to set other options
+# supported by BWA tool
+############################################################
+-useBWA
+-database_16s_fasta /DATMA/16sDatabase/rfam/RFAM_db.fasta
+############################################################
+#CLAME
+#-bases: Set number of bases comma separator
+# to bin the reads [default: 70]
+#-sizeBin: Minimal reads to report a bin
+#-ld: Discard reads with least than this number
+# of matched reads
+#-fm9: PATH to previously generated fm9 file
+#-block: Process the dataset by blocks of this size n
+# [default: all]
+#-clame_aux: Use this flag to set other options
+# supported by CLAME tool
+############################################################
+-bases 70,50
+-sizeBin 5000
+-ld 10
+#-block 500
+#-fm9 /DATMA/examples/bmini/Bancomini.fm9
+#-clame_aux -tol 0.1
+############################################################
+#ASSEMBLY OPTIONS
+#-assembly: Select assembly tool: velvet, spades, or megahit
+# [default: spades]
+#-asm_aux: Use this flag to set other options
+# supported by the assembly tool
+############################################################
+-assembly spades
+-asm_aux --only-assembler
+############################################################
+#ASSEMBLY QUALITY WITH QUAST TOOL OPTIONS
+#-use_ref: Enable a reference genome to asses
+# the bin completeness
+#-ref_name: PATH to a reference genome
+#-quast_aux --mgm: Use MetaGeneMark for gene prediction
+#-quast_aux --glimmer: Use GlimmerHMM for gene prediction
+#-quast_aux: Use this flag to set other options supported
+# by the QUAST tool
+############################################################
+#ORF DETECTION AND TAXONOMIC ANALYSIS
+#-ORF_aux -p meta: Enable metagenomic analysis for Prodigal tool
+#-ORF_aux: Use this flag to set other options
+# supported by the Prodigal tool
+#-checkm_aux: Use this flag to set other options
+# supported by the CheckM tool
+############################################################
+-ORF_aux -p meta
+############################################################
+#BLAST
+#-database_nt: PATH to NT database
+#-blast_aux: Use this flag to set other options
+# supported by the BLAST tool
+############################################################
+-database_nt /DATMA/nt_atabase/nt_dec_2019/nt
+############################################################
+#Kaiju
+#-database_kaiju: PATH to Kaiju database
+#-kaiju_aux: Use this flag to set other options
+# supported by the Kaiju tool
+############################################################
+-database_kaiju /DATMA/kaijudb/
+############################################################
+#Krona
+#-combine: Combine data from each bin within the Krona chart
+############################################################
+-combine
+############################################################
+#BUSCO
+#-lineage: PATH to bacteria dataset for BUSCO tool
+############################################################
+-lineage /DATMA/busco_bacteria/
+############################################################
+#DELETE intermediate files
+#If you set this flag, DATMA will delete most intermediate
+#files to save disk space. #However, it would prevent DATMA
+#from restarting from an intermediate point
+############################################################
+#-delete
