@@ -30,7 +30,7 @@
 # (pass forward and reverse by a comma separated)
 ############################################################
 -inputFile /DATMA/examples/brocadia/SRR1188120.fastq
--outputDir /DATMA/examples/brocadia/brocaidia_out
+-outputDir /DATMA/examples/brocadia/brocadia_out
 -cpus 30
 -typeReads fastq
 ############################################################
